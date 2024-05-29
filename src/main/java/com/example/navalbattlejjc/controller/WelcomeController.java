@@ -1,5 +1,4 @@
 package com.example.navalbattlejjc.controller;
-
 import com.example.navalbattlejjc.model.Ship;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,6 +20,14 @@ public class WelcomeController {
     private boolean verticalRotation = false;
     private Ship currentShip;
     private Board board = new Board();
+    private int aircraftCarrierCount = 1;
+    private int submarineCount = 2;
+    private int destructorCount = 3;
+    private int frigateCount = 4;
+    private Button generateAircraftCarrierButton = new Button();
+    private Button generateSubmarineButton = new Button();
+    private Button generateDestructorButton = new Button();
+    private Button generateFrigateButton = new Button();
 
     @FXML
     private void handleMouseClicked() {
@@ -29,7 +36,6 @@ public class WelcomeController {
             GridPane playerGridPane = getGridPane();
 
             // Create Button for the Aircraft Carriers
-            Button generateAircraftCarrierButton = new Button();
             generateAircraftCarrierButton.setLayoutX(288);
             generateAircraftCarrierButton.setLayoutY(500);
             generateAircraftCarrierButton.setPrefSize(123, 36);
@@ -37,7 +43,6 @@ public class WelcomeController {
             generateAircraftCarrierButton.setOnAction(onHandleButtonPlayAircraftCarrier);
 
             // Create Button for the submarines
-            Button generateSubmarineButton = new Button();
             generateSubmarineButton.setLayoutX(288);
             generateSubmarineButton.setLayoutY(550);
             generateSubmarineButton.setPrefSize(123, 36);
@@ -45,7 +50,6 @@ public class WelcomeController {
             generateSubmarineButton.setOnAction(onHandleButtonPlaySubmarine);
 
             // Create Button for the destructors
-            Button generateDestructorButton = new Button();
             generateDestructorButton.setLayoutX(288);
             generateDestructorButton.setLayoutY(600);
             generateDestructorButton.setPrefSize(123, 36);
@@ -53,7 +57,6 @@ public class WelcomeController {
             generateDestructorButton.setOnAction(onHandleButtonPlayDestructor);
 
             // Create Button for the frigates
-            Button generateFrigateButton = new Button();
             generateFrigateButton.setLayoutX(288);
             generateFrigateButton.setLayoutY(650);
             generateFrigateButton.setPrefSize(123, 36);
@@ -68,33 +71,57 @@ public class WelcomeController {
             gameStarted = true;
         }
     }
-
     EventHandler<ActionEvent> onHandleButtonPlayAircraftCarrier = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            currentShip = new Ship(4);
+            if (aircraftCarrierCount > 0) {
+                currentShip = new Ship(4);
+                aircraftCarrierCount--;
+                if (aircraftCarrierCount == 0) {
+                    generateAircraftCarrierButton.setDisable(true);
+                }
+            }
         }
     };
 
     EventHandler<ActionEvent> onHandleButtonPlaySubmarine = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            currentShip = new Ship(3);
+            if (submarineCount > 0) {
+                currentShip = new Ship(3);
+                submarineCount--;
+                if (submarineCount == 0) {
+                    generateSubmarineButton.setDisable(true);
+                }
+            }
         }
     };
 
     EventHandler<ActionEvent> onHandleButtonPlayDestructor = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            currentShip = new Ship(2);
+            if (destructorCount > 0) {
+                currentShip = new Ship(2);
+                destructorCount--;
+                if (destructorCount == 0) {
+                    generateDestructorButton.setDisable(true);
+                }
+            }
         }
     };
 
     EventHandler<ActionEvent> onHandleButtonPlayFrigate = new EventHandler<ActionEvent>() {
         @Override
-        public void handle(ActionEvent event) {currentShip = new Ship(1);}
+        public void handle(ActionEvent event) {
+            if (frigateCount > 0) {
+                currentShip = new Ship(1);
+                frigateCount--;
+                if (frigateCount == 0) {
+                    generateFrigateButton.setDisable(true);
+                }
+            }
+        }
     };
-
 
     private GridPane getGridPane() {
         GridPane playerGridPane = new GridPane();
