@@ -1,0 +1,35 @@
+[33mcommit 791b5ba1315f778a93530c5fae778e1b5851b764[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjact[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 6267d9d 81673e2
+Author: Juan Cortés <131735120+JuanCortesRo@users.noreply.github.com>
+Date:   Wed May 29 00:55:58 2024 -0500
+
+    Merge pull request #2 from JuanCortesRo/jjcr
+    
+    Ship and Board model classes were created, added functionality to add…
+
+[33mcommit 81673e27a5bcc73f12dc3c95b5864c8ce654516e[m[33m ([m[1;31morigin/jjcr[m[33m)[m
+Author: Juan José Cortés Rodríguez <juan.jose.cortes@correounivalle.edu.co>
+Date:   Wed May 29 00:51:55 2024 -0500
+
+    Ship and Board model classes were created, added functionality to add ships to the board in the WelcomeController
+
+[33mcommit 6267d9d58ab9f4f5669022619c187d7e9d592486[m
+Merge: 0cdb197 1408609
+Author: Juan Cortés <131735120+JuanCortesRo@users.noreply.github.com>
+Date:   Fri May 17 00:51:56 2024 -0500
+
+    Merge pull request #1 from JuanCortesRo/jjcr
+    
+    Default classes was deleted and added the model-view-controller struc…
+
+[33mcommit 14086096fed0bffd535f3abee94a3b4ede336974[m
+Author: Juan José Cortés Rodríguez <juan.jose.cortes@correounivalle.edu.co>
+Date:   Fri May 17 00:47:30 2024 -0500
+
+    Defauld classes was deleted and added the model-view-controller structure
+
+[33mcommit 0cdb1973a92f570964e39f046bb383bd5fb381f6[m
+Author: Your Name <you@example.com>
+Date:   Thu May 16 23:43:12 2024 -0500
+
+    First commit
