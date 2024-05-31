@@ -1,16 +1,14 @@
 package com.example.navalbattlejjc;
 
-import com.example.navalbattlejjc.view.WelcomeStage;
+import com.example.navalbattlejjc.view.GameStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws IOException {
-        WelcomeStage.getInstance();
+        GameStage.getInstance();
     }
 
     public static void main(String[] args) {
