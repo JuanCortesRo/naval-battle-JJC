@@ -7,10 +7,11 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
-public class WelcomeStage extends Stage {
-    public WelcomeStage() throws IOException {
+public class GameStage extends Stage {
+    public GameStage() throws IOException {
         setTitle("Naval Battle");
-        setMaximized(true);
+        setResizable(false);
+
 
         // Load the FXML file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("game-view.fxml"));
@@ -23,11 +24,11 @@ public class WelcomeStage extends Stage {
         show();
     }
 
-    public static WelcomeStage getInstance() throws IOException {
-        return WelcomeStageHolder.INSTANCE = new WelcomeStage();
+    public static GameStage getInstance() throws IOException {
+        return WelcomeStageHolder.INSTANCE = new GameStage();
     }
 
     private static class WelcomeStageHolder {
-        private static WelcomeStage INSTANCE;
+        private static GameStage INSTANCE;
     }
 }

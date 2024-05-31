@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 import com.example.navalbattlejjc.model.Board;
 import javafx.scene.effect.ColorAdjust;
 
-public class WelcomeController {
+public class GameController {
 
     @FXML
     private Pane mainPane;
@@ -30,19 +30,6 @@ public class WelcomeController {
     private Button generateDestructorButton = new Button();
     private Button generateFrigateButton = new Button();
 
-    private void toggleRotateEvent(boolean enable) {
-        if (enable) {
-            mainPane.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.R && gameStarted && currentShip != null) {
-                    verticalRotation = !verticalRotation;
-                    System.out.println("Rotation ship: " + verticalRotation);
-                }
-            });
-        } else {
-            mainPane.setOnKeyPressed(null);
-        }
-    }
-
     @FXML
     private void handleMouseClicked() {
         if (!gameStarted) {
@@ -57,15 +44,86 @@ public class WelcomeController {
         }
     }
 
-    private void createButtons() {
-        createButton(generateAircraftCarrierButton, "PORTAAVIONES", 600, 200, onHandleButtonPlayAircraftCarrier);
-        createButton(generateSubmarineButton, "SUBMARINO", 600, 250, onHandleButtonPlaySubmarine);
-        createButton(generateDestructorButton, "DESTRUCTOR", 600, 300, onHandleButtonPlayDestructor);
-        createButton(generateFrigateButton, "FRAGATA", 600, 350, onHandleButtonPlayFrigate);
+    @FXML
+    private void toggleRotateEvent(boolean enable) {
+        if (enable) {
+            mainPane.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.R && gameStarted && currentShip != null) {
+                    verticalRotation = !verticalRotation;
+                    System.out.println("Rotation ship: " + verticalRotation);
+                }
+            });
+        } else {
+            mainPane.setOnKeyPressed(null);
+        }
     }
 
-    private void createButton(Button button, String text, double layoutX, double layoutY, EventHandler<ActionEvent> eventHandler) {
-        button.setLayoutX(layoutX);
+    EventHandler<ActionEvent> onHandleButtonPlayAircraftCarrier = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent event) {
+            if (aircraftCarrierCount > 0) {
+                toggleRotateEvent(true);
+                aircraftCarrierCount--;
+                currentShip = new Ship(4);
+                applyColorEffectIfZero((Button) event.getSource(), aircraftCarrierCount);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> onHandleButtonPlaySubmarine = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent event) {
+            if (submarineCount > 0) {
+                toggleRotateEvent(true);
+                currentShip = new Ship(3);
+                submarineCount--;
+                applyColorEffectIfZero((Button) event.getSource(), submarineCount);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> onHandleButtonPlayDestructor = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent event) {
+            if (destructorCount > 0) {
+                toggleRotateEvent(true);
+                destructorCount--;
+                currentShip = new Ship(2);
+                applyColorEffectIfZero((Button) event.getSource(), destructorCount);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> onHandleButtonPlayFrigate = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent event) {
+            if (frigateCount > 0) {
+                toggleRotateEvent(true);
+                frigateCount--;
+                currentShip = new Ship(1);
+                applyColorEffectIfZero((Button) event.getSource(), frigateCount);
+            }
+        }
+    };
+
+    private void applyColorEffectIfZero(Button button, int count) {
+        if (count == 0) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setHue(0.85);
+            colorAdjust.setSaturation(-0.27);
+            button.setEffect(colorAdjust);
+        }
+    }
+
+    private void createButtons() {
+        createButton(generateAircraftCarrierButton, "PORTAAVIONES", 200, onHandleButtonPlayAircraftCarrier);
+        createButton(generateSubmarineButton, "SUBMARINO", 250, onHandleButtonPlaySubmarine);
+        createButton(generateDestructorButton, "DESTRUCTOR", 300, onHandleButtonPlayDestructor);
+        createButton(generateFrigateButton, "FRAGATA", 350, onHandleButtonPlayFrigate);
+    }
+
+    private void createButton(Button button, String text, double layoutY, EventHandler<ActionEvent> eventHandler) {
+        button.setLayoutX(950);
         button.setLayoutY(layoutY);
         button.setPrefSize(123, 36);
         button.setText(text);
@@ -73,76 +131,21 @@ public class WelcomeController {
         button.setStyle("-fx-background-color : #0188f7");
     }
 
-    EventHandler<ActionEvent> onHandleButtonPlayAircraftCarrier = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            if (aircraftCarrierCount > 0) {
-                toggleRotateEvent(true);
-                aircraftCarrierCount--;
-                currentShip = new Ship(4);
-                applyColorEffectIfZero((Button) event.getSource(), aircraftCarrierCount, 0.85, -0.27);
-            }
-        }
-    };
-
-    EventHandler<ActionEvent> onHandleButtonPlaySubmarine = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            if (submarineCount > 0) {
-                toggleRotateEvent(true);
-                currentShip = new Ship(3);
-                submarineCount--;
-                applyColorEffectIfZero((Button) event.getSource(), submarineCount, 0.85, -0.27);
-            }
-        }
-    };
-
-    EventHandler<ActionEvent> onHandleButtonPlayDestructor = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            if (destructorCount > 0) {
-                toggleRotateEvent(true);
-                destructorCount--;
-                currentShip = new Ship(2);
-                applyColorEffectIfZero((Button) event.getSource(), destructorCount, 0.85, -0.27);
-            }
-        }
-    };
-
-    EventHandler<ActionEvent> onHandleButtonPlayFrigate = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            if (frigateCount > 0) {
-                toggleRotateEvent(true);
-                frigateCount--;
-                currentShip = new Ship(1);
-                applyColorEffectIfZero((Button) event.getSource(), frigateCount, 0.85, -0.27);
-            }
-        }
-    };
-
-    private void applyColorEffectIfZero(Button button, int count, double hue, double saturation) {
-        if (count == 0) {
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setHue(hue);
-            colorAdjust.setSaturation(saturation);
-            button.setEffect(colorAdjust);
-        }
-    }
-
     private GridPane getGridPane() {
         GridPane playerGridPane = new GridPane();
         playerGridPane.setAlignment(Pos.CENTER);
         playerGridPane.setPadding(new Insets(2, 2, 2, 2));
         playerGridPane.setGridLinesVisible(false);
+        playerGridPane.setLayoutX(400);
+        playerGridPane.setLayoutY(100);
         playerGridPane.setStyle("-fx-background-color : #0188f7");
         playerGridPane.setMinSize(500,500);
 
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 Pane cell = new Pane();
-                cell.setMinSize(50, 50);
-                cell.setStyle("-fx-border-color: white;");
+                cell.setMinSize(51, 51);
+                cell.setStyle("-fx-border-color: white");
                 cell.setOnMouseClicked(cellClickHandler);
                 cell.setOnMouseEntered(cellMouseHandler);
                 cell.setOnMouseExited(cellMouseExitHandler);
@@ -152,11 +155,13 @@ public class WelcomeController {
         return playerGridPane;
     }
 
-    EventHandler<MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> cellMouseHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             if (gameStarted && currentShip != null) {
                 Pane sourcePane = (Pane) mouseEvent.getSource();
+                Integer colIndex = GridPane.getColumnIndex(sourcePane);
+                Integer rowIndex = GridPane.getRowIndex(sourcePane);
                 int length = currentShip.getLength();
 
                 // Remove previous spans
@@ -169,19 +174,18 @@ public class WelcomeController {
                     GridPane.setRowSpan(sourcePane, length);
                 }
 
-                sourcePane.setStyle("-fx-border-color: white; -fx-background-color: green;");
+                if (canPlaceShip(rowIndex, colIndex, length, verticalRotation)) {
+                    sourcePane.setStyle("-fx-border-color: white; -fx-background-color: #32ff0a;");
+                } else {
+                    sourcePane.setStyle("-fx-border-color: white; -fx-background-color: #ff0000;");
+                }
             }
         }
     };
 
-    EventHandler<MouseEvent> cellMouseExitHandler = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            ((Pane) mouseEvent.getSource()).setStyle("-fx-border-color: white;");
-        }
-    };
+    EventHandler<MouseEvent> cellMouseExitHandler = mouseEvent -> ((Pane) mouseEvent.getSource()).setStyle("-fx-border-color: white;");
 
-    EventHandler<MouseEvent> cellClickHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> cellClickHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent event) {
             if (currentShip != null) {
@@ -190,9 +194,9 @@ public class WelcomeController {
                 Integer rowIndex = GridPane.getRowIndex(cell);
 
                 if (colIndex != null && rowIndex != null) {
-                    if (canPlaceShip(rowIndex, colIndex, currentShip.getLength(),verticalRotation)) {
+                    if (canPlaceShip(rowIndex, colIndex, currentShip.getLength(), verticalRotation)) {
                         placeShip(rowIndex, colIndex);
-                        currentShip = null; // Reset currentShip after placing
+                        currentShip = null; //Reset currentShip after put it in the board
                     }
                 }
             }

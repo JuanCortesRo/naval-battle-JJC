@@ -3,5 +3,5 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<Pane fx:id="welcomePane" onMouseClicked="#handleMouseClicked" style="-fx-background-color: #001426;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.navalbattlejjc.controller.WelcomeController">
+<Pane fx:id="mainPane" onMouseClicked="#handleMouseClicked" prefHeight="700" prefWidth="1300" style="-fx-background-color: #001426;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.navalbattlejjc.controller.GameController">
 </Pane>
