@@ -11,6 +11,8 @@ import java.util.List;
 public class Ship {
     private int length;
 
+    private int[][] shipPositions;
+
     public void createAnyShip(GridPane gridPane, int coordX, int coordY, boolean rotation) {
         if (length == 4) {
             createShip(gridPane, coordX, coordY, rotation, length);
@@ -404,6 +406,8 @@ public class Ship {
         return list;
     }
 
+    public int[][]getPositions(){return shipPositions;}
+    public void setPositions(int [][] matrix){this.shipPositions = matrix;}
     public Ship(int length) {
         this.length = length;
     }
