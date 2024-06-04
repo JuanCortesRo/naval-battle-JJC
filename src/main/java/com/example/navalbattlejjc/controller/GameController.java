@@ -34,7 +34,6 @@ public class GameController {
     private int submarineCount = 2;
     private int destructorCount = 3;
     private int frigateCount = 4;
-
     private Button generateAircraftCarrierButton = new Button();
     private Button generateSubmarineButton = new Button();
     private Button generateDestructorButton = new Button();
@@ -105,6 +104,7 @@ public class GameController {
             mainPane.getChildren().addAll(playerGridPane, buttonsHbox);
             // Mark that the game has started
             gameStarted = true;
+            printEnemyBoard();
         }
     }
 
@@ -309,6 +309,17 @@ public class GameController {
         int[][] playerBoard = board.getPlayerBoard();
         System.out.println("Matriz del Jugador:");
         for (int[] row : playerBoard) {
+            for (int cell : row) {
+                System.out.print(cell + "  ");
+            }
+            System.out.println();
+        }
+    }
+
+    private void printEnemyBoard() {
+        int[][] enemyBoard = board.getEnemyBoard();
+        System.out.println("Matriz del Enemigo:");
+        for (int[] row : enemyBoard) {
             for (int cell : row) {
                 System.out.print(cell + "  ");
             }
