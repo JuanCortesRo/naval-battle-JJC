@@ -1,17 +1,26 @@
 package com.example.navalbattlejjc.controller;
 import com.example.navalbattlejjc.model.Ship;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import com.example.navalbattlejjc.model.Board;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class GameController {
 
@@ -25,20 +34,75 @@ public class GameController {
     private int submarineCount = 2;
     private int destructorCount = 3;
     private int frigateCount = 4;
+
     private Button generateAircraftCarrierButton = new Button();
     private Button generateSubmarineButton = new Button();
     private Button generateDestructorButton = new Button();
     private Button generateFrigateButton = new Button();
+    private ImageView menuTitle = new ImageView();
+    private ImageView mainBackground0 = new ImageView();
+    private ImageView mainBackground1 = new ImageView();
+    private ImageView menuAlert = new ImageView();
+    private HBox buttonsHbox = new HBox();
+
+    private GridPane playerGridPane = getGridPane();
+    
+    @FXML
+    private void initialize() {
+        Image titleImage = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_title.png"));
+        Image backgroundImage0 = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/background.png"));
+        Image alertImage = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_alert.png"));
+        Image backgroundImage1 = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/background2.png"));
+
+        menuTitle.setImage(titleImage);
+        mainBackground0.setImage(backgroundImage0);
+        mainBackground1.setImage(backgroundImage1);
+        menuAlert.setImage(alertImage);
+
+        TranslateTransition backgroundTranslateTransition = new TranslateTransition(Duration.seconds(20), mainBackground0);
+        backgroundTranslateTransition.setFromX(0);
+        backgroundTranslateTransition.setToX(-1300);
+        backgroundTranslateTransition.setCycleCount(TranslateTransition.INDEFINITE);
+        backgroundTranslateTransition.setInterpolator(Interpolator.LINEAR);
+        backgroundTranslateTransition.play();
+
+        mainPane.getChildren().addAll(mainBackground1,mainBackground0,menuTitle,menuAlert);
+    }
 
     @FXML
     private void handleMouseClicked() {
         if (!gameStarted) {
+
+            TranslateTransition titleTranslateTransition = new TranslateTransition(Duration.seconds(1), menuTitle);
+            titleTranslateTransition.setFromY(0);
+            titleTranslateTransition.setToY(-700);
+            titleTranslateTransition.play();
+
+            TranslateTransition alertTranslateTransition = new TranslateTransition(Duration.seconds(2), menuAlert);
+            alertTranslateTransition.setFromY(0);
+            alertTranslateTransition.setToY(700);
+            alertTranslateTransition.play();
+
             // Create the GridPane
-            GridPane playerGridPane = getGridPane();
+            playerGridPane = getGridPane();
+
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), playerGridPane);
+            fadeTransition.setFromValue(0.0);
+            fadeTransition.setToValue(1.0);
+            fadeTransition.play();
+
             // Create the buttons with the createButtons Method
             createButtons();
+
+            addMouseScrollListener();
+            toggleRotateEvent(true);
+
+            buttonsHbox.setLayoutX(400);
+            buttonsHbox.setLayoutY(630);
+            buttonsHbox.setSpacing(7);
+
             // Add the buttons to the pane
-            mainPane.getChildren().addAll(generateAircraftCarrierButton, generateDestructorButton, generateSubmarineButton, generateFrigateButton, playerGridPane);
+            mainPane.getChildren().addAll(playerGridPane, buttonsHbox);
             // Mark that the game has started
             gameStarted = true;
         }
@@ -46,16 +110,21 @@ public class GameController {
 
     @FXML
     private void toggleRotateEvent(boolean enable) {
-        if (enable) {
-            mainPane.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.R && gameStarted && currentShip != null) {
-                    verticalRotation = !verticalRotation;
-                    System.out.println("Rotation ship: " + verticalRotation);
-                }
-            });
-        } else {
-            mainPane.setOnKeyPressed(null);
-        }
+        mainPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.R && gameStarted && currentShip != null) {
+                verticalRotation = !verticalRotation;
+                System.out.println("Rotation ship: " + verticalRotation);
+            }
+        });
+    }
+    @FXML
+    private void addMouseScrollListener() {
+        mainPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (gameStarted && currentShip != null) {
+                verticalRotation = !verticalRotation;
+                System.out.println("Rotation ship: " + verticalRotation);
+            }
+        });
     }
 
     EventHandler<ActionEvent> onHandleButtonPlayAircraftCarrier = new EventHandler<>() {
@@ -116,19 +185,19 @@ public class GameController {
     }
 
     private void createButtons() {
-        createButton(generateAircraftCarrierButton, "PORTAAVIONES", 200, onHandleButtonPlayAircraftCarrier);
-        createButton(generateSubmarineButton, "SUBMARINO", 250, onHandleButtonPlaySubmarine);
-        createButton(generateDestructorButton, "DESTRUCTOR", 300, onHandleButtonPlayDestructor);
-        createButton(generateFrigateButton, "FRAGATA", 350, onHandleButtonPlayFrigate);
+        createButton(generateAircraftCarrierButton, "PORTAAVIONES", onHandleButtonPlayAircraftCarrier, buttonsHbox);
+        createButton(generateSubmarineButton, "SUBMARINO", onHandleButtonPlaySubmarine, buttonsHbox);
+        createButton(generateDestructorButton, "DESTRUCTOR", onHandleButtonPlayDestructor, buttonsHbox);
+        createButton(generateFrigateButton, "FRAGATA", onHandleButtonPlayFrigate, buttonsHbox);
     }
 
-    private void createButton(Button button, String text, double layoutY, EventHandler<ActionEvent> eventHandler) {
+    private void createButton(Button button, String text, EventHandler<ActionEvent> eventHandler, HBox hBox) {
         button.setLayoutX(950);
-        button.setLayoutY(layoutY);
         button.setPrefSize(123, 36);
         button.setText(text);
         button.setOnAction(eventHandler);
         button.setStyle("-fx-background-color : #0188f7");
+        hBox.getChildren().add(button);
     }
 
     private GridPane getGridPane() {
@@ -223,7 +292,6 @@ public class GameController {
 
     //This method change the values of the playerBoard matrix, 0 to 1 when a Ship is placed
     private void placeShip(int row, int col) {
-        GridPane playerGridPane = (GridPane) mainPane.getChildren().get(4);
         for (int i = 0; i < currentShip.getLength(); i++) {
             if (!verticalRotation) {
                 board.getPlayerBoard()[row][col + i] = 1;
