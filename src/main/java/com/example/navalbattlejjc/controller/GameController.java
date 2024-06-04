@@ -41,6 +41,7 @@ public class GameController {
             mainPane.getChildren().addAll(generateAircraftCarrierButton, generateDestructorButton, generateSubmarineButton, generateFrigateButton, playerGridPane);
             // Mark that the game has started
             gameStarted = true;
+            printEnemyBoard();
         }
     }
 
@@ -241,6 +242,17 @@ public class GameController {
         int[][] playerBoard = board.getPlayerBoard();
         System.out.println("Matriz del Jugador:");
         for (int[] row : playerBoard) {
+            for (int cell : row) {
+                System.out.print(cell + "  ");
+            }
+            System.out.println();
+        }
+    }
+
+    private void printEnemyBoard() {
+        int[][] enemyBoard = board.getEnemyBoard();
+        System.out.println("Matriz del Enemigo:");
+        for (int[] row : enemyBoard) {
             for (int cell : row) {
                 System.out.print(cell + "  ");
             }
