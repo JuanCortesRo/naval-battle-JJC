@@ -97,8 +97,9 @@ public class GameController {
             toggleRotateEvent(true);
 
             buttonsHbox.setLayoutX(400);
-            buttonsHbox.setLayoutY(630);
+            buttonsHbox.setLayoutY(710);
             buttonsHbox.setSpacing(7);
+            moveVbox(buttonsHbox,false);
 
             // Add the buttons to the pane
             mainPane.getChildren().addAll(playerGridPane, buttonsHbox);
@@ -131,6 +132,7 @@ public class GameController {
         @Override
         public void handle(ActionEvent event) {
             if (aircraftCarrierCount > 0) {
+                moveVbox(buttonsHbox, true);
                 toggleRotateEvent(true);
                 aircraftCarrierCount--;
                 currentShip = new Ship(4);
@@ -143,6 +145,7 @@ public class GameController {
         @Override
         public void handle(ActionEvent event) {
             if (submarineCount > 0) {
+                moveVbox(buttonsHbox, true);
                 toggleRotateEvent(true);
                 currentShip = new Ship(3);
                 submarineCount--;
@@ -155,6 +158,7 @@ public class GameController {
         @Override
         public void handle(ActionEvent event) {
             if (destructorCount > 0) {
+                moveVbox(buttonsHbox, true);
                 toggleRotateEvent(true);
                 destructorCount--;
                 currentShip = new Ship(2);
@@ -167,6 +171,7 @@ public class GameController {
         @Override
         public void handle(ActionEvent event) {
             if (frigateCount > 0) {
+                moveVbox(buttonsHbox, true);
                 toggleRotateEvent(true);
                 frigateCount--;
                 currentShip = new Ship(1);
@@ -198,6 +203,19 @@ public class GameController {
         button.setOnAction(eventHandler);
         button.setStyle("-fx-background-color : #0188f7");
         hBox.getChildren().add(button);
+    }
+
+    private void moveVbox(HBox hBox, boolean to){
+        TranslateTransition vBoxTranslateTransition = new TranslateTransition(Duration.seconds(0.5), hBox);
+        if (to){
+            vBoxTranslateTransition.setFromY(-80);
+            vBoxTranslateTransition.setToY(0);
+        }
+        else {
+            vBoxTranslateTransition.setFromY(0);
+            vBoxTranslateTransition.setToY(-80);
+        }
+        vBoxTranslateTransition.play();
     }
 
     private GridPane getGridPane() {
@@ -302,6 +320,7 @@ public class GameController {
         }
         printPlayerBoard();
         toggleRotateEvent(false);
+        moveVbox(buttonsHbox, false);
     }
 
     //Temporal method to view the playerBoard
