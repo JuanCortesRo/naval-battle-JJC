@@ -1,9 +1,7 @@
 // Developed by por "JJC"
 package com.example.navalbattlejjc.controller;
 import com.example.navalbattlejjc.model.Ship;
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,15 +37,18 @@ public class GameController {
     private Button generateDestructorButton = new Button("DESTRUCTOR");
     private Button generateFrigateButton = new Button("FRAGATA");
     private Button tutorial1Button = new Button("¡ENTENDIDO!");
+    private Button playButton = new Button("JUGAR");
     private ImageView menuTitleImageView = new ImageView();
     private ImageView mainBackground0ImageView = new ImageView();
     private ImageView mainBackground1ImageView = new ImageView();
     private ImageView menuAlertImageView = new ImageView();
     private ImageView tutorial1ImageView = new ImageView();
+    private ImageView selectionImageView = new ImageView();
     private HBox buttonsHbox = new HBox();
 
     private GridPane playerGridPane = getGridPane();
-    
+    private GridPane enemyGridPane = getEnemyGridPane();
+
     @FXML
     private void initialize() {
         Image titleImage = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_title.png"));
@@ -203,11 +204,13 @@ public class GameController {
             TranslateTransition tutorial1TranslateTransition = new TranslateTransition(Duration.seconds(1), tutorial1ImageView);
             tutorial1TranslateTransition.setToY(-900);
             tutorial1TranslateTransition.play();
-            FadeTransition buttonFadeTransition = new FadeTransition(Duration.seconds(1), tutorial1Button);
+            FadeTransition buttonFadeTransition = new FadeTransition(Duration.seconds(0.25), tutorial1Button);
             buttonFadeTransition.setFromValue(1.0);
             buttonFadeTransition.setToValue(0.0);
-            tutorial1Button.setDisable(true);
+            TranslateTransition buttonTranslateTransition = new TranslateTransition(Duration.seconds(0.5), tutorial1Button);
+            buttonTranslateTransition.setToY(150);
             buttonFadeTransition.play();
+            buttonTranslateTransition.play();
         }
     }
 
@@ -225,15 +228,19 @@ public class GameController {
 
     private void loadGame(){
         loadTutorial1(false);
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), playerGridPane);
-        fadeTransition.setFromValue(0.0);
-        fadeTransition.setToValue(0.98);
-        fadeTransition.play();
+        gridPaneFade(playerGridPane);
 
         buttonsHbox.setLayoutX(395);
         buttonsHbox.setLayoutY(710);
         buttonsHbox.setSpacing(8);
         moveVbox(buttonsHbox,false);
+    }
+
+    private void gridPaneFade(GridPane gridPane){
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), gridPane);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(0.98);
+        fadeTransition.play();
     }
 
     private void createButtons() {
@@ -336,6 +343,112 @@ public class GameController {
         }
     };
 
+
+    private GridPane getEnemyGridPane() {
+        GridPane enemyGridPane = new GridPane();
+        enemyGridPane.setAlignment(Pos.CENTER);
+        enemyGridPane.setPadding(new Insets(2, 2, 2, 2));
+        enemyGridPane.setGridLinesVisible(false);
+        enemyGridPane.setLayoutX(400);
+        enemyGridPane.setLayoutY(100);
+        enemyGridPane.setStyle("-fx-background-color : #0188f7");
+        enemyGridPane.setMinSize(500,500);
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                Pane enemyCell = new Pane();
+                enemyCell.setMinSize(51, 51);
+                enemyCell.setStyle("-fx-border-color: white");
+                enemyCell.setOnMouseEntered(cellMouseHandler2);
+                enemyCell.setOnMouseExited(enemyCellMouseExitHandler);
+                enemyGridPane.add(enemyCell, col, row);
+            }
+        }
+        return enemyGridPane;
+    }
+
+    EventHandler<MouseEvent> cellMouseHandler2 = mouseEvent -> {
+        Pane sourcePane = (Pane) mouseEvent.getSource();
+        Image put = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/seleccion.png"));
+        selectionImageView.setImage(put);
+        rotate(selectionImageView,true);
+        scale(selectionImageView,true);
+        sourcePane.getChildren().add(selectionImageView);
+    };
+    EventHandler<MouseEvent> enemyCellMouseExitHandler = mouseEvent -> {
+        Pane sourcePane = (Pane) mouseEvent.getSource();
+        sourcePane.setStyle("-fx-border-color: white; -fx-background-color: #0188f7;"); // Restablece el color original
+        rotate(selectionImageView,false);
+        scale(selectionImageView,false);
+        sourcePane.getChildren().remove(selectionImageView);
+    };
+
+    private void rotate(ImageView imageView, boolean doTransition){
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(5),imageView);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
+        rotateTransition.setCycleCount(TranslateTransition.INDEFINITE);
+        if(doTransition){
+            rotateTransition.play();
+        }
+        else {
+            rotateTransition.stop();
+        }
+    }
+
+    private void scale(ImageView imageView, boolean doTransition){
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1),imageView);
+        scaleTransition.setFromY(0.95);
+        scaleTransition.setFromX(0.95);
+        scaleTransition.setToX(1.1);
+        scaleTransition.setToY(1.1);
+        scaleTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
+        scaleTransition.setCycleCount(TranslateTransition.INDEFINITE);
+        scaleTransition.setAutoReverse(true);
+        if(doTransition){
+            scaleTransition.play();
+        }
+        else {
+            scaleTransition.stop();
+        }
+    }
+
+    private boolean canStartGame(){
+        if(aircraftCarrierCount==0&&destructorCount==0&&frigateCount==0&&submarineCount==0){
+            return true;
+        }
+        return false;
+    }
+
+    private void startGame(){
+        playButton.setPrefSize(250, 120);
+        playButton.setLayoutX(530);
+        playButton.setLayoutY(300);
+        playButton.setOnAction(onHandleButtonPlayGame);
+        playButton.setStyle("-fx-font-family: 'Trebuchet MS';-fx-background-color : #0056a2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 50.0; -fx-font-size: 40;");
+        mainPane.getChildren().add(playButton);
+
+    }
+
+    EventHandler<ActionEvent> onHandleButtonPlayGame = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent event) {
+            enemyGridPane = getEnemyGridPane();
+            moveGridpane(playerGridPane,-275);
+            moveGridpane(enemyGridPane,275);
+            gridPaneFade(enemyGridPane);
+            moveVbox(buttonsHbox, true);
+            mainPane.getChildren().add(enemyGridPane);
+            mainPane.getChildren().remove(playButton);
+        }
+    };
+
+    private void moveGridpane(GridPane gridPane, int toX){
+        TranslateTransition gridTranslateTransition = new TranslateTransition(Duration.seconds(1.5), gridPane);
+        gridTranslateTransition.setFromY(0);
+        gridTranslateTransition.setToX(toX);
+        gridTranslateTransition.play();
+    }
+
     //This method verify if the ship can be placed, depends on its length and if vertical rotation is active
     private boolean canPlaceShip(int row, int col, int length, boolean verticalRotationT) {
         if (!verticalRotationT) {
@@ -363,6 +476,9 @@ public class GameController {
                 board.getPlayerBoard()[row + i][col] = 1;
             }
             currentShip.createAnyShip(playerGridPane, col, row, verticalRotation);
+        }
+        if (canStartGame()){
+            startGame();
         }
         printPlayerBoard();
         toggleRotateEvent();
