@@ -1,3 +1,4 @@
+// Developed by por "JJC"
 package com.example.navalbattlejjc.model;
 
 import javafx.scene.layout.GridPane;
@@ -140,7 +141,7 @@ public class Ship {
                 1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 96, 40, 70, 45, 46, 46, 30, 42, 16, 36, 1,25
         };
         double[] shadowDestructorPoints = {
-                1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 99, 12, 99, 42, 70, 48, 46, 50, 30, 46, 16, 40, 1,25
+                1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 99, 12, 99, 42, 70, 48, 46, 49, 30, 46, 16, 40, 1,25
         };
         double[] interiorDestructorPoints = {
                 8, 25, 16, 20, 30, 12, 46, 8, 70, 9, 97, 14, 97, 36, 70, 41, 46, 42, 30, 38, 16, 30, 8,25
