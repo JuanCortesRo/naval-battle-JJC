@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ship {
+    private Ship[] ships;
     private int length;
 
     private int[][] shipPositions;
@@ -409,9 +410,9 @@ public class Ship {
 
     public int[][]getPositions(){return shipPositions;}
     public void setPositions(int [][] matrix){this.shipPositions = matrix;}
-    public Ship(int length) {
-        this.length = length;
-    }
+    public Ship[]getShips(){return ships;}
+    public void setShips(Ship[] list){this.ships = list;}
+    public Ship(int length) {this.length = length;}
 
     public int getLength() {
         return length;
