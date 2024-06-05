@@ -1,12 +1,18 @@
 // Developed by por "JJC"
 package com.example.navalbattlejjc.model;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.lang.*;
 
 public class Board {
-    public Ship[][] enemyShips = new Ship[4][4];
+    public Ship[] aircraftCarrierEnemy;
+    public Ship[] destructorsEnemyList;
+    public Ship[] submarinesEnemyList;
+    public Ship[] frigatesEnemyList;
+    public Ship[] aircraftCarrierPlayer = new Ship[1];
+    public Ship[] destructorsPlayerList = new Ship[3];
+    public Ship[] submarinesPlayerList = new Ship[2];
+    public Ship[] frigatesPlayerList = new Ship[4];
     private int[][] playerBoard;
     private int[][] enemyBoard;
 
@@ -25,6 +31,10 @@ public class Board {
         };
 
         this.enemyBoard = randomBoard();
+        createShipList(aircraftCarrierPlayer,4,1);
+        createShipList(submarinesPlayerList,3,2);
+        createShipList(destructorsPlayerList,2,3);
+        createShipList(frigatesPlayerList,1,4);
     }
 
     public int[][] getPlayerBoard() {
@@ -68,7 +78,7 @@ public class Board {
 
         //Aircraft Carrier
         boolean aircraftCarrier = false;
-        Ship[] aircraftCarriersEnemy = new Ship[1];
+        Ship[] aircraftCarrierEnemyList = new Ship[1];
         if (shipsPositions[0][1] + 3 < 10) {//right
             boolean entra1 = true;
             for (int i = 1; i < 4; i++) {
@@ -97,8 +107,7 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
-                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
-                this.enemyShips[0] = aircraftCarriersEnemy;
+                aircraftCarrierEnemyList[0] = aircraftCarrierEnemy;
             }
         }
         if (shipsPositions[0][1] - 3 >= 0 && !aircraftCarrier) {//left
@@ -129,8 +138,7 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
-                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
-                this.enemyShips[0] = aircraftCarriersEnemy;
+                aircraftCarrierEnemyList[0] = aircraftCarrierEnemy;
             }
         }
         if (shipsPositions[0][0] + 3 < 10 && !aircraftCarrier) {//down
@@ -161,8 +169,7 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
-                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
-                this.enemyShips[0] = aircraftCarriersEnemy;
+                aircraftCarrierEnemyList[0] = aircraftCarrierEnemy;
             }
         }
 
@@ -194,10 +201,10 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
-                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
-                this.enemyShips[0] = aircraftCarriersEnemy;
+                aircraftCarrierEnemyList[0] = aircraftCarrierEnemy;
             }
         }
+        this.aircraftCarrierEnemy = aircraftCarrierEnemyList;
 
         //submarine
         Ship submarinesEnemy = new Ship(3);
@@ -330,9 +337,8 @@ public class Board {
                 }
             }
         }
-        this.enemyShips[1] = submarinesEnemyList;
+        this.submarinesEnemyList = submarinesEnemyList;
         //destructor
-        Ship destructorsEnemy = new Ship(2);
         Ship[] destructorsEnemyList = new Ship[3];
         for (int p=3; p<6; p++){
             boolean destructor = false;
@@ -442,7 +448,7 @@ public class Board {
                 }
             }
         }
-        this.enemyShips[2] = destructorsEnemyList;
+        this.destructorsEnemyList = destructorsEnemyList;
         //frigate
         Ship [] frigateEnemyList = new Ship[4];
         for (int i=6; i<10; i++){
@@ -460,6 +466,15 @@ public class Board {
             frigateEnemy.setPositions(SP);
             frigateEnemyList[i-6] = frigateEnemy;
         }
+        this.frigatesEnemyList = frigateEnemyList;
         return matrix;
+    }
+    private void createShipList(Ship[] shipType, int o, int p){
+        int SP[][] = new int[3][2];
+        for (int i=0; i<p; i++){
+            Ship ship = new Ship(o);
+            ship.setPositions(SP);
+            shipType[i] = ship;
+        }
     }
 }
