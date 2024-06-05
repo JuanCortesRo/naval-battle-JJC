@@ -470,7 +470,7 @@ public class Board {
         return matrix;
     }
     private void createShipList(Ship[] shipType, int o, int p){
-        int SP[][] = new int[3][2];
+        int SP[][] = new int[o][2];
         for (int i=0; i<p; i++){
             Ship ship = new Ship(o);
             ship.setPositions(SP);
