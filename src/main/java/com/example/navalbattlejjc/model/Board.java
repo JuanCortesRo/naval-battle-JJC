@@ -1,10 +1,12 @@
 // Developed by por "JJC"
 package com.example.navalbattlejjc.model;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.lang.*;
 
 public class Board {
+    public Ship[][] enemyShips = new Ship[4][4];
     private int[][] playerBoard;
     private int[][] enemyBoard;
 
@@ -66,6 +68,7 @@ public class Board {
 
         //Aircraft Carrier
         boolean aircraftCarrier = false;
+        Ship[] aircraftCarriersEnemy = new Ship[1];
         if (shipsPositions[0][1] + 3 < 10) {//right
             boolean entra1 = true;
             for (int i = 1; i < 4; i++) {
@@ -94,6 +97,8 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
+                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
+                this.enemyShips[0] = aircraftCarriersEnemy;
             }
         }
         if (shipsPositions[0][1] - 3 >= 0 && !aircraftCarrier) {//left
@@ -124,6 +129,8 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
+                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
+                this.enemyShips[0] = aircraftCarriersEnemy;
             }
         }
         if (shipsPositions[0][0] + 3 < 10 && !aircraftCarrier) {//down
@@ -154,6 +161,8 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
+                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
+                this.enemyShips[0] = aircraftCarriersEnemy;
             }
         }
 
@@ -185,6 +194,8 @@ public class Board {
                     System.out.println();
                 }
                 aircraftCarrierEnemy.setPositions(SP);
+                aircraftCarriersEnemy[0] = aircraftCarrierEnemy;
+                this.enemyShips[0] = aircraftCarriersEnemy;
             }
         }
 
@@ -319,11 +330,12 @@ public class Board {
                 }
             }
         }
-        //destroyer
-        Ship destroyersEnemy = new Ship(2);
-        Ship[] destroyersEnemyList = new Ship[3];
+        this.enemyShips[1] = submarinesEnemyList;
+        //destructor
+        Ship destructorsEnemy = new Ship(2);
+        Ship[] destructorsEnemyList = new Ship[3];
         for (int p=3; p<6; p++){
-            boolean destroyer = false;
+            boolean destructor = false;
             if (shipsPositions[p][1] + 1 < 10) {//right
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]][shipsPositions[p][1] + 1] != 0) {
@@ -331,33 +343,33 @@ public class Board {
                 }
                 if (entra1) {
                     System.out.println("right");
-                    destroyer = true;
+                    destructor = true;
                     matrix[shipsPositions[p][0]][shipsPositions[p][1] + 1] = 1;
-                    Ship destroyerEnemy = new Ship(2);
+                    Ship destructorEnemy = new Ship(2);
                     int SP[][] = new int[2][2];
                     for (int i=0; i<2;i++){
                         SP[i][0] = shipsPositions[p][0];
                         SP[i][1] = shipsPositions[p][1]+i;
                     }
-                    System.out.println("Matriz del destroyer "+(p-3)+":");
+                    System.out.println("Matriz del destructor "+(p-3)+":");
                     for (int[] row : SP) {
                         for (int cell : row) {
                             System.out.print(cell + "  ");
                         }
                         System.out.println();
                     }
-                    destroyerEnemy.setPositions(SP);
-                    destroyersEnemyList[p-3] = destroyerEnemy;
+                    destructorEnemy.setPositions(SP);
+                    destructorsEnemyList[p-3] = destructorEnemy;
                 }
             }
-            if (shipsPositions[p][1] + 1 < 10 && !destroyer) {//left
+            if (shipsPositions[p][1] + 1 < 10 && !destructor) {//left
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]][shipsPositions[p][1] - 1] != 0) {
                     entra1 = false;
                 }
                 if (entra1) {
                     System.out.println("left");
-                    destroyer = true;
+                    destructor = true;
                     matrix[shipsPositions[p][0]][shipsPositions[p][1] - 1] = 1;
                     Ship destroyerEnemy = new Ship(2);
                     int SP[][] = new int[2][2];
@@ -365,7 +377,7 @@ public class Board {
                         SP[i][0] = shipsPositions[p][0];
                         SP[i][1] = shipsPositions[p][1]-i;
                     }
-                    System.out.println("Matriz del destroyer "+(p-3)+":");
+                    System.out.println("Matriz del destructor "+(p-3)+":");
                     for (int[] row : SP) {
                         for (int cell : row) {
                             System.out.print(cell + "  ");
@@ -373,17 +385,17 @@ public class Board {
                         System.out.println();
                     }
                     destroyerEnemy.setPositions(SP);
-                    destroyersEnemyList[p-3] = destroyerEnemy;
+                    destructorsEnemyList[p-3] = destroyerEnemy;
                 }
             }
-            if (shipsPositions[p][1] + 1 >= 0 && !destroyer) {//down
+            if (shipsPositions[p][1] + 1 >= 0 && !destructor) {//down
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]+1][shipsPositions[p][1]] != 0) {
                     entra1 = false;
                 }
                 if (entra1) {
                     System.out.println("down");
-                    destroyer = true;
+                    destructor = true;
                     matrix[shipsPositions[p][0]+1][shipsPositions[p][1]] = 1;
                     Ship destroyerEnemy = new Ship(2);
                     int SP[][] = new int[2][2];
@@ -391,7 +403,7 @@ public class Board {
                         SP[i][1] = shipsPositions[p][1];
                         SP[i][0] = shipsPositions[p][0]+i;
                     }
-                    System.out.println("Matriz del destroyer "+(p-3)+":");
+                    System.out.println("Matriz del destructor "+(p-3)+":");
                     for (int[] row : SP) {
                         for (int cell : row) {
                             System.out.print(cell + "  ");
@@ -399,18 +411,18 @@ public class Board {
                         System.out.println();
                     }
                     destroyerEnemy.setPositions(SP);
-                    destroyersEnemyList[p-3] = destroyerEnemy;
+                    destructorsEnemyList[p-3] = destroyerEnemy;
                 }
             }
 
-            if (shipsPositions[p][1] - 1 >= 0 && !destroyer) {//up
+            if (shipsPositions[p][1] - 1 >= 0 && !destructor) {//up
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]-1][shipsPositions[p][1]] != 0) {
                     entra1 = false;
                 }
                 if (entra1) {
                     System.out.println("up");
-                    destroyer = true;
+                    destructor = true;
                     matrix[shipsPositions[p][0]-1][shipsPositions[p][1]] = 1;
                     Ship destroyerEnemy = new Ship(2);
                     int SP[][] = new int[2][2];
@@ -418,7 +430,7 @@ public class Board {
                         SP[i][1] = shipsPositions[p][1];
                         SP[i][0] = shipsPositions[p][0]-i;
                     }
-                    System.out.println("Matriz del destroyer "+(p-3)+":");
+                    System.out.println("Matriz del destructor "+(p-3)+":");
                     for (int[] row : SP) {
                         for (int cell : row) {
                             System.out.print(cell + "  ");
@@ -426,9 +438,27 @@ public class Board {
                         System.out.println();
                     }
                     destroyerEnemy.setPositions(SP);
-                    destroyersEnemyList[p-3] = destroyerEnemy;
+                    destructorsEnemyList[p-3] = destroyerEnemy;
                 }
             }
+        }
+        this.enemyShips[2] = destructorsEnemyList;
+        //frigate
+        Ship [] frigateEnemyList = new Ship[4];
+        for (int i=6; i<10; i++){
+            Ship frigateEnemy = new Ship(1);
+            int SP[][] = new int[1][2];
+            SP[0][0] = shipsPositions[i][0];
+            SP[0][1] = shipsPositions[i][1];
+            System.out.println("Posición de la fragata "+(i-5)+":");
+            for (int[] row : SP) {
+                for (int cell : row) {
+                    System.out.print(cell + "  ");
+                }
+                System.out.println();
+            }
+            frigateEnemy.setPositions(SP);
+            frigateEnemyList[i-6] = frigateEnemy;
         }
         return matrix;
     }
