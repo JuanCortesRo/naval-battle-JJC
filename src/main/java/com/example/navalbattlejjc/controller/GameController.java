@@ -1,4 +1,4 @@
-// Developed by por "JJC"
+// Developed by "JJC"
 package com.example.navalbattlejjc.controller;
 import com.example.navalbattlejjc.model.Ship;
 import javafx.animation.*;
