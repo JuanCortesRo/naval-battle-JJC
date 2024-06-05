@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,6 +21,9 @@ import com.example.navalbattlejjc.model.Board;
 import javafx.scene.effect.ColorAdjust;
 import javafx.util.Duration;
 
+import java.util.Objects;
+import java.util.Random;
+
 public class GameController {
 
     @FXML
@@ -28,10 +32,10 @@ public class GameController {
     private boolean verticalRotation = false;
     private Ship currentShip;
     private Board board = new Board();
-    private int aircraftCarrierCount = 1;
-    private int submarineCount = 2;
-    private int destructorCount = 3;
-    private int frigateCount = 4;
+    private int aircraftCarrierCount = 0;
+    private int submarineCount = 0;
+    private int destructorCount = 0;
+    private int frigateCount = 0;
     private Button generateAircraftCarrierButton = new Button("PORTAAVIONES");
     private Button generateSubmarineButton = new Button("SUBMARINO");
     private Button generateDestructorButton = new Button("DESTRUCTOR");
@@ -51,10 +55,10 @@ public class GameController {
 
     @FXML
     private void initialize() {
-        Image titleImage = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_title.png"));
-        Image backgroundImage0 = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/background.png"));
-        Image alertImage = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_alert.png"));
-        Image backgroundImage1 = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/background2.png"));
+        Image titleImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_title.png")));
+        Image backgroundImage0 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/background.png")));
+        Image alertImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/menu_alert.png")));
+        Image backgroundImage1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/background2.png")));
 
         menuTitleImageView.setImage(titleImage);
         mainBackground0ImageView.setImage(backgroundImage0);
@@ -116,12 +120,16 @@ public class GameController {
     EventHandler<ActionEvent> onHandleButtonPlayAircraftCarrier = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
-            if (aircraftCarrierCount > 0) {
+            if (aircraftCarrierCount < 1) {
                 moveVbox(buttonsHbox, true);
                 toggleRotateEvent();
-                aircraftCarrierCount--;
+                aircraftCarrierCount++;
                 currentShip = new Ship(4);
-                applyColorEffectIfZero((Button) event.getSource(), aircraftCarrierCount);
+                if (aircraftCarrierCount==1){
+                    aircraftCarrierCount = 0;
+                    applyColorEffectIfZero((Button) event.getSource(), aircraftCarrierCount);
+                    aircraftCarrierCount = 1;
+                }
             }
         }
     };
@@ -129,12 +137,16 @@ public class GameController {
     EventHandler<ActionEvent> onHandleButtonPlaySubmarine = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
-            if (submarineCount > 0) {
+            if (submarineCount < 2) {
                 moveVbox(buttonsHbox, true);
                 toggleRotateEvent();
                 currentShip = new Ship(3);
-                submarineCount--;
-                applyColorEffectIfZero((Button) event.getSource(), submarineCount);
+                submarineCount++;
+                if (submarineCount==2){
+                    submarineCount = 0;
+                    applyColorEffectIfZero((Button) event.getSource(), submarineCount);
+                    submarineCount = 2;
+                }
             }
         }
     };
@@ -142,12 +154,16 @@ public class GameController {
     EventHandler<ActionEvent> onHandleButtonPlayDestructor = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
-            if (destructorCount > 0) {
+            if (destructorCount < 3) {
                 moveVbox(buttonsHbox, true);
                 toggleRotateEvent();
-                destructorCount--;
+                destructorCount++;
                 currentShip = new Ship(2);
-                applyColorEffectIfZero((Button) event.getSource(), destructorCount);
+                if (destructorCount==3){
+                    destructorCount = 0;
+                    applyColorEffectIfZero((Button) event.getSource(), destructorCount);
+                    destructorCount = 3;
+                }
             }
         }
     };
@@ -155,12 +171,16 @@ public class GameController {
     EventHandler<ActionEvent> onHandleButtonPlayFrigate = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
-            if (frigateCount > 0) {
+            if (frigateCount < 4) {
                 moveVbox(buttonsHbox, true);
                 toggleRotateEvent();
-                frigateCount--;
+                frigateCount++;
                 currentShip = new Ship(1);
-                applyColorEffectIfZero((Button) event.getSource(), frigateCount);
+                if (frigateCount==4){
+                    frigateCount = 0;
+                    applyColorEffectIfZero((Button) event.getSource(), frigateCount);
+                    frigateCount = 4;
+                }
             }
         }
     };
@@ -183,7 +203,7 @@ public class GameController {
     }
 
     private void loadTutorial1(boolean tutorialActive){
-        Image tutorial1Image = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/tutorialparte1.png"));
+        Image tutorial1Image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/tutorialparte1.png")));
         tutorial1ImageView.setImage(tutorial1Image);
         tutorial1Button.setPrefSize(170, 70);
         tutorial1Button.setLayoutX(570);
@@ -358,7 +378,8 @@ public class GameController {
                 Pane enemyCell = new Pane();
                 enemyCell.setMinSize(51, 51);
                 enemyCell.setStyle("-fx-border-color: white");
-                enemyCell.setOnMouseEntered(cellMouseHandler2);
+                enemyCell.setOnMouseClicked(enemyCellClickHandler);
+                enemyCell.setOnMouseEntered(enemyCellMouseHandler);
                 enemyCell.setOnMouseExited(enemyCellMouseExitHandler);
                 enemyGridPane.add(enemyCell, col, row);
             }
@@ -366,9 +387,9 @@ public class GameController {
         return enemyGridPane;
     }
 
-    EventHandler<MouseEvent> cellMouseHandler2 = mouseEvent -> {
+    EventHandler<MouseEvent> enemyCellMouseHandler = mouseEvent -> {
         Pane sourcePane = (Pane) mouseEvent.getSource();
-        Image put = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/seleccion.png"));
+        Image put = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/seleccion.png")));
         selectionImageView.setImage(put);
         rotate(selectionImageView,true);
         scale(selectionImageView,true);
@@ -376,10 +397,16 @@ public class GameController {
     };
     EventHandler<MouseEvent> enemyCellMouseExitHandler = mouseEvent -> {
         Pane sourcePane = (Pane) mouseEvent.getSource();
-        sourcePane.setStyle("-fx-border-color: white; -fx-background-color: #0188f7;"); // Restablece el color original
+        sourcePane.setStyle("-fx-border-color: white; -fx-background-color: #0188f7;");
         rotate(selectionImageView,false);
         scale(selectionImageView,false);
         sourcePane.getChildren().remove(selectionImageView);
+    };
+    EventHandler<MouseEvent> enemyCellClickHandler = new EventHandler<>() {
+        @Override
+        public void handle(MouseEvent event) {
+            playEnemyTurn();
+        }
     };
 
     private void rotate(ImageView imageView, boolean doTransition){
@@ -413,7 +440,7 @@ public class GameController {
     }
 
     private boolean canStartGame(){
-        if(aircraftCarrierCount==0&&destructorCount==0&&frigateCount==0&&submarineCount==0){
+        if(aircraftCarrierCount==1&&destructorCount==3&&frigateCount==4&&submarineCount==2){
             return true;
         }
         return false;
@@ -426,7 +453,46 @@ public class GameController {
         playButton.setOnAction(onHandleButtonPlayGame);
         playButton.setStyle("-fx-font-family: 'Trebuchet MS';-fx-background-color : #0056a2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 50.0; -fx-font-size: 40;");
         mainPane.getChildren().add(playButton);
+        playEnemyTurn();
+    }
 
+    private void playEnemyTurn(){
+        Random random = new Random();
+        int r = random.nextInt(10);
+        int c = random.nextInt(10);
+        if (board.getPlayerBoard()[r][c] == 1){
+            Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
+            ImageView imageView = new ImageView(hitImage);
+            playerGridPane.add(imageView,c,r);
+            board.getPlayerBoard()[r][c] = 2;
+            printPlayerBoard();
+        }
+        playPlayerTurn();
+    }
+
+    private void playPlayerTurn(){
+        Random random = new Random();
+        int r = random.nextInt(10);
+        int c = random.nextInt(10);
+        if (board.getEnemyBoard()[r][c] == 0) {
+            Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
+            ImageView imageView = new ImageView(hitImage);
+            enemyGridPane.add(imageView, c, r);
+            board.getEnemyBoard()[r][c] = 2;
+            printPlayerBoard();
+        }
+    }
+
+    //getter of the pane in any gridPane
+    private Node getNodeFromGridPane(GridPane gridPane, int row, int column) {
+        for (Node node : gridPane.getChildren()) {
+            Integer nodeRow = GridPane.getRowIndex(node);
+            Integer nodeColumn = GridPane.getColumnIndex(node);
+            if (nodeRow != null && nodeRow == row && nodeColumn != null && nodeColumn == column) {
+                return node;
+            }
+        }
+        return null;
     }
 
     EventHandler<ActionEvent> onHandleButtonPlayGame = new EventHandler<>() {
@@ -469,11 +535,110 @@ public class GameController {
 
     //This method change the values of the playerBoard matrix, 0 to 1 when a Ship is placed
     private void placeShip(int row, int col) {
+        int [][] toPrint;
         for (int i = 0; i < currentShip.getLength(); i++) {
             if (!verticalRotation) {
                 board.getPlayerBoard()[row][col + i] = 1;
+                if (currentShip.getLength()==4){
+                    System.out.println(aircraftCarrierCount);
+                    board.aircraftCarrierPlayer[0].getPositions()[i][0] = row;
+                    board.aircraftCarrierPlayer[0].getPositions()[i][1] = col+i;
+                    toPrint = board.aircraftCarrierPlayer[0].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
+                else if(currentShip.getLength()==3){
+                    System.out.println(submarineCount-1);
+                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][0] = row;
+                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][1] = col+i;
+                    toPrint = board.submarinesPlayerList[submarineCount-1].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
+                else if(currentShip.getLength()==2){
+                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][0] = row;
+                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][1] = col+i;
+                    toPrint = board.destructorsPlayerList[destructorCount-1].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
+                else if(currentShip.getLength()==1){
+                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][0] = row;
+                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][1] = col+i;
+                    toPrint = board.frigatesPlayerList[frigateCount-1].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
             } else {
                 board.getPlayerBoard()[row + i][col] = 1;
+                if (currentShip.getLength()==4){
+                    board.aircraftCarrierPlayer[0].getPositions()[i][0] = row+i;
+                    board.aircraftCarrierPlayer[0].getPositions()[i][1] = col;
+                    toPrint = board.aircraftCarrierPlayer[0].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
+                else if(currentShip.getLength()==3){
+                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][0] = row+i;
+                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][1] = col;
+                    toPrint = board.submarinesPlayerList[submarineCount-1].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
+                else if(currentShip.getLength()==2){
+                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][0] = row+i;
+                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][1] = col;
+                    toPrint = board.destructorsPlayerList[destructorCount-1].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
+                else if(currentShip.getLength()==1){
+                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][0] = row+i;
+                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][1] = col;
+                    toPrint = board.frigatesPlayerList[frigateCount-1].getPositions();
+                    System.out.println("Posiciones del barco que acabás de poner wacho:");
+                    for (int[] rooow : toPrint) {
+                        for (int cell : rooow) {
+                            System.out.print(cell + "  ");
+                        }
+                        System.out.println();
+                    }
+                }
             }
             currentShip.createAnyShip(playerGridPane, col, row, verticalRotation);
         }
