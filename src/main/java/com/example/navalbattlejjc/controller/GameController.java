@@ -20,7 +20,6 @@ import javafx.scene.layout.Pane;
 import com.example.navalbattlejjc.model.Board;
 import javafx.scene.effect.ColorAdjust;
 import javafx.util.Duration;
-
 import java.util.Objects;
 import java.util.Random;
 
@@ -461,11 +460,10 @@ public class GameController {
         int r = random.nextInt(10);
         int c = random.nextInt(10);
         if (board.getPlayerBoard()[r][c] == 1){
-            Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
+            Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/fuego.png")));
             ImageView imageView = new ImageView(hitImage);
             playerGridPane.add(imageView,c,r);
             board.getPlayerBoard()[r][c] = 2;
-            printPlayerBoard();
         }
         playPlayerTurn();
     }
@@ -474,13 +472,39 @@ public class GameController {
         Random random = new Random();
         int r = random.nextInt(10);
         int c = random.nextInt(10);
-        if (board.getEnemyBoard()[r][c] == 0) {
+        if (board.getEnemyBoard()[r][c] == 1) {
+            board.getEnemyBoard()[r][c] = 2;
             Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
             ImageView imageView = new ImageView(hitImage);
             enemyGridPane.add(imageView, c, r);
-            board.getEnemyBoard()[r][c] = 2;
-            printPlayerBoard();
+            //printEnemyBoard();
+            for (int i=0; i<board.enemyShips.length; i++){
+                for (int j=0; j<board.enemyShips[i].length;j++){
+                    if (!board.enemyShips[i][j].isSunken){
+                        for (int k=0; k<board.enemyShips[i][j].getLength();k++){
+                            if(board.enemyShips[i][j].getPositions()[k][0]==r && board.enemyShips[i][j].getPositions()[k][1]==c){
+                                int verifyPositionsE = board.enemyShips[i][j].getLength();
+                                for (int l=0; l<board.enemyShips[i][j].getPositions().length;l++){
+                                    if(board.getEnemyBoard()[board.enemyShips[i][j].getPositions()[l][0]][board.enemyShips[i][j].getPositions()[l][1]] == 2){
+                                        verifyPositionsE--;
+                                    }
+                                }
+                                if (verifyPositionsE==0){
+                                    board.enemyShips[i][j].isSunken = true;
+                                    for (int m=0; m<board.enemyShips[i][j].getLength();m++){
+                                        Image hitImage1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/fuego.png")));
+                                        ImageView imageView1 = new ImageView(hitImage1);
+                                        enemyGridPane.add(imageView1, board.enemyShips[i][j].getPositions()[m][1],board.enemyShips[i][j].getPositions()[m][0]);
+                                        //printEnemyBoard();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
     }
 
     //getter of the pane in any gridPane
@@ -535,113 +559,14 @@ public class GameController {
 
     //This method change the values of the playerBoard matrix, 0 to 1 when a Ship is placed
     private void placeShip(int row, int col) {
-        int [][] toPrint;
         for (int i = 0; i < currentShip.getLength(); i++) {
             if (!verticalRotation) {
                 board.getPlayerBoard()[row][col + i] = 1;
-                if (currentShip.getLength()==4){
-                    System.out.println(aircraftCarrierCount);
-                    board.aircraftCarrierPlayer[0].getPositions()[i][0] = row;
-                    board.aircraftCarrierPlayer[0].getPositions()[i][1] = col+i;
-                    toPrint = board.aircraftCarrierPlayer[0].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
-                else if(currentShip.getLength()==3){
-                    System.out.println(submarineCount-1);
-                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][0] = row;
-                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][1] = col+i;
-                    toPrint = board.submarinesPlayerList[submarineCount-1].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
-                else if(currentShip.getLength()==2){
-                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][0] = row;
-                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][1] = col+i;
-                    toPrint = board.destructorsPlayerList[destructorCount-1].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
-                else if(currentShip.getLength()==1){
-                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][0] = row;
-                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][1] = col+i;
-                    toPrint = board.frigatesPlayerList[frigateCount-1].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
             } else {
                 board.getPlayerBoard()[row + i][col] = 1;
-                if (currentShip.getLength()==4){
-                    board.aircraftCarrierPlayer[0].getPositions()[i][0] = row+i;
-                    board.aircraftCarrierPlayer[0].getPositions()[i][1] = col;
-                    toPrint = board.aircraftCarrierPlayer[0].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
-                else if(currentShip.getLength()==3){
-                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][0] = row+i;
-                    board.submarinesPlayerList[submarineCount-1].getPositions()[i][1] = col;
-                    toPrint = board.submarinesPlayerList[submarineCount-1].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
-                else if(currentShip.getLength()==2){
-                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][0] = row+i;
-                    board.destructorsPlayerList[destructorCount-1].getPositions()[i][1] = col;
-                    toPrint = board.destructorsPlayerList[destructorCount-1].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
-                else if(currentShip.getLength()==1){
-                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][0] = row+i;
-                    board.frigatesPlayerList[frigateCount-1].getPositions()[i][1] = col;
-                    toPrint = board.frigatesPlayerList[frigateCount-1].getPositions();
-                    System.out.println("Posiciones del barco que acabás de poner wacho:");
-                    for (int[] rooow : toPrint) {
-                        for (int cell : rooow) {
-                            System.out.print(cell + "  ");
-                        }
-                        System.out.println();
-                    }
-                }
             }
-            currentShip.createAnyShip(playerGridPane, col, row, verticalRotation);
         }
+        currentShip.createAnyShip(playerGridPane, col, row, verticalRotation);
         if (canStartGame()){
             startGame();
         }

@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Ship {
     private int length;
+    public boolean isSunken = false;
 
     private int[][] shipPositions;
 
