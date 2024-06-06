@@ -506,7 +506,7 @@ public class GameController {
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(event -> {
             if (board.getPlayerBoard()[r][c] == 1) {
-                Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/fuego.png")));
+                Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/crash.png")));
                 ImageView imageView = new ImageView(hitImage);
                 playerGridPane.add(imageView, c, r);
                 board.getPlayerBoard()[r][c] = 2;
@@ -532,30 +532,6 @@ public class GameController {
     }
 
     private void playPlayerTurn(){
-//            for (int i = 0; i < board.enemyShips.length; i++) {
-//                for (int j = 0; j < board.enemyShips[i].length; j++) {
-//                    if (!board.enemyShips[i][j].isSunken) {
-//                        for (int k = 0; k < board.enemyShips[i][j].getLength(); k++) {
-//                            if (board.enemyShips[i][j].getPositions()[k][0] == whereY && board.enemyShips[i][j].getPositions()[k][1] == whereX) {
-//                                int verifyPositionsE = board.enemyShips[i][j].getLength();
-//                                for (int l = 0; l < board.enemyShips[i][j].getPositions().length; l++) {
-//                                    if (board.getEnemyBoard()[board.enemyShips[i][j].getPositions()[l][0]][board.enemyShips[i][j].getPositions()[l][1]] == 2) {
-//                                        verifyPositionsE--;
-//                                    }
-//                                }
-//                                if (verifyPositionsE == 0) {
-//                                    board.enemyShips[i][j].isSunken = true;
-//                                    for (int m = 0; m < board.enemyShips[i][j].getLength(); m++) {
-//                                        Image hitImage1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/fuego.png")));
-//                                        ImageView imageView1 = new ImageView(hitImage1);
-//                                        enemyGridPane.add(imageView1, board.enemyShips[i][j].getPositions()[m][1], board.enemyShips[i][j].getPositions()[m][0]);
-//                                        //printEnemyBoard();
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//            }
         colorEffect(mainBackground1ImageView,0,0);
     }
 
