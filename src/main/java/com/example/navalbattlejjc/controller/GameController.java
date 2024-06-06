@@ -52,6 +52,8 @@ public class GameController {
     private ImageView menuAlertImageView = new ImageView();
     private ImageView tutorial1ImageView = new ImageView();
     private ImageView selectionImageView = new ImageView();
+    private ImageView winImageView = new ImageView();
+    private ImageView looseImageView = new ImageView();
     private HBox buttonsHbox = new HBox();
 
     private GridPane playerGridPane = getGridPane();
@@ -553,10 +555,25 @@ public class GameController {
         if(playerLives==0){
             colorEffect(playerGridPane,0.85,-0.27);
             colorEffect(enemyGridPane,0.85,-0.27);
+            addGameResult(false);
         }
         if (enemyLives==0){
             colorEffect(mainBackground1ImageView,-0.4,1);
             colorEffect(mainBackground1ImageView,-0.4,1);
+            addGameResult(true);
+        }
+    }
+
+    private void addGameResult(boolean result){
+        if(result){
+            Image winImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/winImage.png")));
+            ImageView imageView = new ImageView(winImage);
+            mainPane.getChildren().add(imageView);
+        }
+        else {
+            Image looseImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/looseImage.png")));
+            ImageView imageView = new ImageView(looseImage);
+            mainPane.getChildren().add(imageView);
         }
     }
 
