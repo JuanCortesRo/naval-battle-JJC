@@ -21,7 +21,7 @@ public class GameStage extends Stage {
         Image icon = new Image(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/favicon.png"));
         getIcons().add(icon);
 
-        // Create the welcome scene and set to the stage
+        /** Create the welcome scene and set to the stage **/
         Scene welcomeScene = new Scene(root);
         setScene(welcomeScene);
 

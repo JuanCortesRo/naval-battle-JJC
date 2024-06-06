@@ -1,0 +1,19 @@
+[33me7231d3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjjcr[m[33m)[m HEAD@{0}: commit (merge): Merge branch 'mfcc' of https://github.com/JuanCortesRo/naval-battle-JJC into jjcr
+[33m6c8a63f[m HEAD@{1}: commit: second version of the turning system 2
+[33m6a8a24b[m[33m ([m[1;31morigin/jjcr[m[33m)[m HEAD@{2}: commit (merge): first versio of the turning system
+[33m42f2103[m HEAD@{3}: commit: a scope icon were added to watch the cell to attack in the enemy GridPane
+[33m8f9a91d[m HEAD@{4}: pull origin master: Fast-forward
+[33m4a4f421[m HEAD@{5}: commit: implemented event to generate enemy gridPane in GameController.java
+[33m85e7170[m HEAD@{6}: commit: small fixes
+[33m3743910[m HEAD@{7}: commit: tutorial added
+[33md49641c[m HEAD@{8}: commit: added transitions to the hBox of the buttons when a ship is placed
+[33m72f91b6[m HEAD@{9}: commit (merge): some visual elements to the game were added using images
+[33ma53d23d[m HEAD@{10}: commit: hola
+[33m4de0896[m HEAD@{11}: commit: 2d shapes for the ships were created
+[33m49ec28f[m HEAD@{12}: commit: Commit #5
+[33m3f01913[m HEAD@{13}: commit: 2D shapes for Ships were created, also GameStage and GameController were deleted and WelcomeController and WelcomeStage were renamed
+[33mbd0945c[m HEAD@{14}: pull origin master: Fast-forward
+[33m81673e2[m HEAD@{15}: commit: Ship and Board model classes were created, added functionality to add ships to the board in the WelcomeController
+[33m1408609[m HEAD@{16}: commit: Defauld classes was deleted and added the model-view-controller structure
+[33m0cdb197[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{17}: checkout: moving from master to jjcr
+[33m0cdb197[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{18}: commit (initial): First commit
