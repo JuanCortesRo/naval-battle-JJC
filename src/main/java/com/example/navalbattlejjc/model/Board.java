@@ -17,6 +17,9 @@ public class Board {
     private int[][] playerBoard;
     private int[][] enemyBoard;
 
+    /** Constructor initializes the player board and enemy board.
+     * Also, creates lists of ships for both player and enemy.**/
+
     public Board() {
         this.playerBoard = new int[][]{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -30,7 +33,7 @@ public class Board {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         };
-
+        /** Create lists of ships for the player **/
         this.enemyBoard = randomBoard();
         createShipList(aircraftCarrierPlayer,4,1);
         createShipList(submarinesPlayerList,3,2);
@@ -50,7 +53,7 @@ public class Board {
     public int[][] getEnemyBoard() {
         return enemyBoard;
     }
-
+/** Creates a random board for the enemy with ships placed randomly **/
     public int[][] randomBoard() {
         Random rand = new Random();
         int matrix[][] = new int[10][10];
@@ -82,10 +85,10 @@ public class Board {
             System.out.println();
         }
 
-        //Aircraft Carrier
+        /** Place the aircraft carrier on the board **/
         boolean aircraftCarrier = false;
         Ship[] aircraftCarrierEnemyList = new Ship[1];
-        if (shipsPositions[0][1] + 3 < 10) {//right
+        if (shipsPositions[0][1] + 3 < 10) {
             boolean entra1 = true;
             for (int i = 1; i < 4; i++) {
                 if (matrix[shipsPositions[0][0]][shipsPositions[0][1] + i] != 0) {
@@ -116,7 +119,7 @@ public class Board {
                 aircraftCarrierEnemyList[0] = aircraftCarrierEnemy;
             }
         }
-        if (shipsPositions[0][1] - 3 >= 0 && !aircraftCarrier) {//left
+        if (shipsPositions[0][1] - 3 >= 0 && !aircraftCarrier) {
             boolean entra2 = true;
             for (int i = 1; i < 4; i++) {
                 if (matrix[shipsPositions[0][0]][shipsPositions[0][1] - i] != 0) {
@@ -147,7 +150,7 @@ public class Board {
                 aircraftCarrierEnemyList[0] = aircraftCarrierEnemy;
             }
         }
-        if (shipsPositions[0][0] + 3 < 10 && !aircraftCarrier) {//down
+        if (shipsPositions[0][0] + 3 < 10 && !aircraftCarrier) {
             boolean entra3 = true;
             for (int i = 1; i < 4; i++) {
                 if (matrix[shipsPositions[0][0] + i][shipsPositions[0][1]] != 0) {
@@ -179,7 +182,7 @@ public class Board {
             }
         }
 
-        if (shipsPositions[0][0] - 3 >= 0 && !aircraftCarrier) {//up
+        if (shipsPositions[0][0] - 3 >= 0 && !aircraftCarrier) {
             boolean entra4 = true;
             for (int i = 1; i < 4; i++) {
                 if (matrix[shipsPositions[0][0] - i][shipsPositions[0][1]] != 0) {
@@ -212,12 +215,12 @@ public class Board {
         }
         this.aircraftCarrierEnemy = aircraftCarrierEnemyList;
 
-        //submarine
+        /** Place the enemy submarine on the board **/
         Ship submarinesEnemy = new Ship(3);
         Ship[] submarinesEnemyList = new Ship[2];
         for (int p=1; p<3; p++){
             boolean submarine = false;
-            if (shipsPositions[p][1] + 2 < 10) {//right
+            if (shipsPositions[p][1] + 2 < 10) {
                 boolean entra1 = true;
                 for (int i = 1; i < 3; i++) {
                     if (matrix[shipsPositions[p][0]][shipsPositions[p][1] + i] != 0) {
@@ -248,7 +251,7 @@ public class Board {
                     submarinesEnemyList[p-1] = submarineEnemy;
                 }
             }
-            if (shipsPositions[p][1] - 2 >= 0 && !submarine) {//left
+            if (shipsPositions[p][1] - 2 >= 0 && !submarine) {
                 boolean entra2 = true;
                 for (int i = 1; i < 3; i++) {
                     if (matrix[shipsPositions[p][0]][shipsPositions[p][1] - i] != 0) {
@@ -279,7 +282,7 @@ public class Board {
                     submarinesEnemyList[p-1] = submarineEnemy;
                 }
             }
-            if (shipsPositions[p][0] + 2 < 10 && !submarine) {//down
+            if (shipsPositions[p][0] + 2 < 10 && !submarine) {
                 boolean entra3 = true;
                 for (int i = 1; i < 3; i++) {
                     if (matrix[shipsPositions[p][0] + i][shipsPositions[p][1]] != 0) {
@@ -311,7 +314,7 @@ public class Board {
                 }
             }
 
-            if (shipsPositions[p][0] - 2 >= 0 && !submarine) {//up
+            if (shipsPositions[p][0] - 2 >= 0 && !submarine) {
                 boolean entra4 = true;
                 for (int i = 1; i < 3; i++) {
                     if (matrix[shipsPositions[p][0] - i][shipsPositions[p][1]] != 0) {
@@ -344,11 +347,12 @@ public class Board {
             }
         }
         this.submarinesEnemyList = submarinesEnemyList;
-        //destructor
+
+        /** Check if destructor can be placed **/
         Ship[] destructorsEnemyList = new Ship[3];
         for (int p=3; p<6; p++){
             boolean destructor = false;
-            if (shipsPositions[p][1] + 1 < 10) {//right
+            if (shipsPositions[p][1] + 1 < 10) {
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]][shipsPositions[p][1] + 1] != 0) {
                         entra1 = false;
@@ -374,7 +378,7 @@ public class Board {
                     destructorsEnemyList[p-3] = destructorEnemy;
                 }
             }
-            if (shipsPositions[p][1] + 1 < 10 && !destructor) {//left
+            if (shipsPositions[p][1] + 1 < 10 && !destructor) {
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]][shipsPositions[p][1] - 1] != 0) {
                     entra1 = false;
@@ -400,7 +404,7 @@ public class Board {
                     destructorsEnemyList[p-3] = destroyerEnemy;
                 }
             }
-            if (shipsPositions[p][1] + 1 >= 0 && !destructor) {//down
+            if (shipsPositions[p][1] + 1 >= 0 && !destructor) {
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]+1][shipsPositions[p][1]] != 0) {
                     entra1 = false;
@@ -427,7 +431,7 @@ public class Board {
                 }
             }
 
-            if (shipsPositions[p][1] - 1 >= 0 && !destructor) {//up
+            if (shipsPositions[p][1] - 1 >= 0 && !destructor) {
                 boolean entra1 = true;
                 if (matrix[shipsPositions[p][0]-1][shipsPositions[p][1]] != 0) {
                     entra1 = false;
@@ -454,8 +458,10 @@ public class Board {
                 }
             }
         }
+        /** Stores the list of enemy destroyers **/
         this.destructorsEnemyList = destructorsEnemyList;
-        //frigate
+
+        /** // Creates and positions frigates for the enemy **/
         Ship [] frigateEnemyList = new Ship[4];
         for (int i=6; i<10; i++){
             Ship frigateEnemy = new Ship(1);
@@ -472,9 +478,11 @@ public class Board {
             frigateEnemy.setPositions(SP);
             frigateEnemyList[i-6] = frigateEnemy;
         }
+        /** Stores a list of enemy frigates **/
         this.frigatesEnemyList = frigateEnemyList;
         return matrix;
     }
+    /** Auxiliary method for creating a list of ships of a specific type **/
     private void createShipList(Ship[] shipType, int o, int p){
         int SP[][] = new int[o][2];
         for (int i=0; i<p; i++){
