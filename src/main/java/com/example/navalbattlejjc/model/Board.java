@@ -5,6 +5,7 @@ import java.util.Random;
 import java.lang.*;
 
 public class Board {
+    public Ship[][] enemyShips = new Ship[4][4];
     public Ship[] aircraftCarrierEnemy;
     public Ship[] destructorsEnemyList;
     public Ship[] submarinesEnemyList;
@@ -35,6 +36,11 @@ public class Board {
         createShipList(submarinesPlayerList,3,2);
         createShipList(destructorsPlayerList,2,3);
         createShipList(frigatesPlayerList,1,4);
+        this.enemyShips[0] = aircraftCarrierEnemy;
+        this.enemyShips[1] = submarinesEnemyList;
+        this.enemyShips[2] = destructorsEnemyList;
+        this.enemyShips[3] = frigatesEnemyList;
+
     }
 
     public int[][] getPlayerBoard() {

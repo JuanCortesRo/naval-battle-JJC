@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ship {
+    public boolean isSunken = false;
     private int length;
-
     private int[][] shipPositions;
 
     public void createAnyShip(GridPane gridPane, int coordX, int coordY, boolean rotation) {
