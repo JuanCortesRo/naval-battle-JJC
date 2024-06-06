@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -204,36 +205,47 @@ public class GameController {
         colorAdjust.setSaturation(saturation);
         node.setEffect(colorAdjust);
     }
-
-    private void loadTutorial1(boolean tutorialActive){
-        Image tutorial1Image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/tutorialparte1.png")));
-        tutorial1ImageView.setImage(tutorial1Image);
-        tutorial1Button.setPrefSize(170, 70);
-        tutorial1Button.setLayoutX(570);
-        tutorial1Button.setLayoutY(580);
-        tutorial1Button.setOnAction(onHandleButtonPlayTutorial);
-        tutorial1Button.setStyle("-fx-font-family: 'Trebuchet MS';-fx-background-color : #0188f7; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25.0; -fx-font-size: 20;");
-        if(tutorialActive){
-            FadeTransition tutorial1FadeTransition = new FadeTransition(Duration.seconds(2), tutorial1ImageView);
-            tutorial1FadeTransition.setFromValue(0.0);
-            tutorial1FadeTransition.setToValue(1.0);
-            tutorial1FadeTransition.play();
-            FadeTransition buttonFadeTransition = new FadeTransition(Duration.seconds(2), tutorial1Button);
-            buttonFadeTransition.setFromValue(0.0);
-            buttonFadeTransition.setToValue(1.0);
-            buttonFadeTransition.play();
-        }
-        else {
-            TranslateTransition tutorial1TranslateTransition = new TranslateTransition(Duration.seconds(1), tutorial1ImageView);
-            tutorial1TranslateTransition.setToY(-900);
-            tutorial1TranslateTransition.play();
-            FadeTransition buttonFadeTransition = new FadeTransition(Duration.seconds(0.25), tutorial1Button);
-            buttonFadeTransition.setFromValue(1.0);
-            buttonFadeTransition.setToValue(0.0);
-            TranslateTransition buttonTranslateTransition = new TranslateTransition(Duration.seconds(0.5), tutorial1Button);
-            buttonTranslateTransition.setToY(150);
-            buttonFadeTransition.play();
-            buttonTranslateTransition.play();
+    /** Displays an error alert to the user when there is an error loading an image. **/
+    private void showAlert(String message, String s) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error al cargar la imagen");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    private void loadTutorial1(boolean tutorialActive) {
+        try {
+            Image tutorial1Image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/tutorialparte1.png")));
+            tutorial1ImageView.setImage(tutorial1Image);
+            tutorial1Button.setPrefSize(170, 70);
+            tutorial1Button.setLayoutX(570);
+            tutorial1Button.setLayoutY(580);
+            tutorial1Button.setOnAction(onHandleButtonPlayTutorial);
+            tutorial1Button.setStyle("-fx-font-family: 'Trebuchet MS';-fx-background-color : #0188f7; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25.0; -fx-font-size: 20;");
+            if (tutorialActive) {
+                FadeTransition tutorial1FadeTransition = new FadeTransition(Duration.seconds(2), tutorial1ImageView);
+                tutorial1FadeTransition.setFromValue(0.0);
+                tutorial1FadeTransition.setToValue(1.0);
+                tutorial1FadeTransition.play();
+                FadeTransition buttonFadeTransition = new FadeTransition(Duration.seconds(2), tutorial1Button);
+                buttonFadeTransition.setFromValue(0.0);
+                buttonFadeTransition.setToValue(1.0);
+                buttonFadeTransition.play();
+            } else {
+                TranslateTransition tutorial1TranslateTransition = new TranslateTransition(Duration.seconds(1), tutorial1ImageView);
+                tutorial1TranslateTransition.setToY(-900);
+                tutorial1TranslateTransition.play();
+                FadeTransition buttonFadeTransition = new FadeTransition(Duration.seconds(0.25), tutorial1Button);
+                buttonFadeTransition.setFromValue(1.0);
+                buttonFadeTransition.setToValue(0.0);
+                TranslateTransition buttonTranslateTransition = new TranslateTransition(Duration.seconds(0.5), tutorial1Button);
+                buttonTranslateTransition.setToY(150);
+                buttonFadeTransition.play();
+                buttonTranslateTransition.play();
+            }
+        } catch (NullPointerException e) {
+            /** Catches NullPointerException exception when image is not found **/
+            showAlert("Error", "No se pudo cargar la imagen del tutorial.");
         }
     }
 
@@ -364,7 +376,8 @@ public class GameController {
                     try {
                         if (canPlaceShip(rowIndex, colIndex, currentShip.getLength(), verticalRotation)) {
                             placeShip(rowIndex, colIndex);
-                            currentShip = null; //Reset currentShip after put it in the board
+                            /**Reset currentShip after put it in the board **/
+                            currentShip = null;
                         }
                     } catch (CheckIfPlacedException e) {
                         throw new RuntimeException(e);
@@ -373,7 +386,6 @@ public class GameController {
             }
         }
     };
-
 
     private GridPane getEnemyGridPane() {
         GridPane enemyGridPane = new GridPane();
@@ -611,7 +623,7 @@ public class GameController {
     /** This method change the values of the playerBoard matrix, 0 to 1 when a Ship is placed **/
     private void placeShip(int row, int col) {
         try {
-            // Checks if the Ship can be placed
+            /** Checks if the Ship can be placed **/
             if (canPlaceShip(row, col, currentShip.getLength(), verticalRotation)) {
                 int[][] toPrint;
                 for (int i = 0; i < currentShip.getLength(); i++) {
