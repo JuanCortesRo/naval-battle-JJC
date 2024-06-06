@@ -30,12 +30,15 @@ public class GameController {
     private Pane mainPane;
     private boolean gameStarted = false;
     private boolean verticalRotation = false;
+    private boolean isPlayerTurn = false;
     private Ship currentShip;
     private Board board = new Board();
     private int aircraftCarrierCount = 0;
     private int submarineCount = 0;
     private int destructorCount = 0;
     private int frigateCount = 0;
+    private int playerLives = 20;
+    private int enemyLives = 20;
     private Button generateAircraftCarrierButton = new Button("PORTAAVIONES");
     private Button generateSubmarineButton = new Button("SUBMARINO");
     private Button generateDestructorButton = new Button("DESTRUCTOR");
@@ -127,7 +130,7 @@ public class GameController {
                 currentShip = new Ship(4);
                 if (aircraftCarrierCount==1){
                     aircraftCarrierCount = 0;
-                    applyColorEffectIfZero((Button) event.getSource(), aircraftCarrierCount);
+                    colorEffect(generateAircraftCarrierButton,0.85,-0.27);
                     aircraftCarrierCount = 1;
                 }
             }
@@ -144,7 +147,7 @@ public class GameController {
                 submarineCount++;
                 if (submarineCount==2){
                     submarineCount = 0;
-                    applyColorEffectIfZero((Button) event.getSource(), submarineCount);
+                    colorEffect(generateSubmarineButton,0.85,-0.27);
                     submarineCount = 2;
                 }
             }
@@ -161,7 +164,7 @@ public class GameController {
                 currentShip = new Ship(2);
                 if (destructorCount==3){
                     destructorCount = 0;
-                    applyColorEffectIfZero((Button) event.getSource(), destructorCount);
+                    colorEffect(generateDestructorButton,0.85,-0.27);
                     destructorCount = 3;
                 }
             }
@@ -178,7 +181,7 @@ public class GameController {
                 currentShip = new Ship(1);
                 if (frigateCount==4){
                     frigateCount = 0;
-                    applyColorEffectIfZero((Button) event.getSource(), frigateCount);
+                    colorEffect(generateFrigateButton,0.85,-0.27);
                     frigateCount = 4;
                 }
             }
@@ -193,13 +196,11 @@ public class GameController {
         }
     };
 
-    private void applyColorEffectIfZero(Button button, int count) {
-        if (count == 0) {
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setHue(0.85);
-            colorAdjust.setSaturation(-0.27);
-            button.setEffect(colorAdjust);
-        }
+    private void colorEffect(Node node, double hue, double saturation) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(hue);
+        colorAdjust.setSaturation(saturation);
+        node.setEffect(colorAdjust);
     }
 
     private void loadTutorial1(boolean tutorialActive){
@@ -389,26 +390,43 @@ public class GameController {
 
     EventHandler<MouseEvent> enemyCellMouseHandler = mouseEvent -> {
         Pane sourcePane = (Pane) mouseEvent.getSource();
-        Image put = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/seleccion.png")));
-        selectionImageView.setImage(put);
-        rotate(selectionImageView,true);
-        scale(selectionImageView,true);
+        Image scoopeImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/seleccion.png")));
+        selectionImageView.setImage(scoopeImage);
+        rotate(selectionImageView, true);
+        scale(selectionImageView, true);
         sourcePane.getChildren().add(selectionImageView);
+
     };
     EventHandler<MouseEvent> enemyCellMouseExitHandler = mouseEvent -> {
         Pane sourcePane = (Pane) mouseEvent.getSource();
         sourcePane.setStyle("-fx-border-color: white; -fx-background-color: #0188f7;");
-        rotate(selectionImageView,false);
-        scale(selectionImageView,false);
+        rotate(selectionImageView, false);
+        scale(selectionImageView, false);
         sourcePane.getChildren().remove(selectionImageView);
+
     };
     EventHandler<MouseEvent> enemyCellClickHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent event) {
-            playEnemyTurn();
+            Pane enemyCell = (Pane) event.getSource();
+            Integer colIndex = GridPane.getColumnIndex(enemyCell);
+            Integer rowIndex = GridPane.getRowIndex(enemyCell);
+            if (board.getEnemyBoard()[rowIndex][colIndex] == 1) {
+                Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
+                ImageView imageView = new ImageView(hitImage);
+                enemyGridPane.add(imageView, colIndex, rowIndex);
+                board.getEnemyBoard()[rowIndex][colIndex] = 2;
+                enemyLives--;
+                playEnemyTurn();
+            } else if (board.getEnemyBoard()[rowIndex][colIndex] == 0) {
+                Image isWaterImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/equis.png")));
+                ImageView imageView = new ImageView(isWaterImage);
+                enemyGridPane.add(imageView, colIndex, rowIndex);
+                board.getEnemyBoard()[rowIndex][colIndex] = 4;
+                playEnemyTurn();
+            }
         }
     };
-
     private void rotate(ImageView imageView, boolean doTransition){
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(5),imageView);
         rotateTransition.setByAngle(360);
@@ -440,10 +458,7 @@ public class GameController {
     }
 
     private boolean canStartGame(){
-        if(aircraftCarrierCount==1&&destructorCount==3&&frigateCount==4&&submarineCount==2){
-            return true;
-        }
-        return false;
+        return aircraftCarrierCount == 1 && destructorCount == 3 && frigateCount == 4 && submarineCount == 2;
     }
 
     private void startGame(){
@@ -453,46 +468,43 @@ public class GameController {
         playButton.setOnAction(onHandleButtonPlayGame);
         playButton.setStyle("-fx-font-family: 'Trebuchet MS';-fx-background-color : #0056a2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 50.0; -fx-font-size: 40;");
         mainPane.getChildren().add(playButton);
-        playEnemyTurn();
     }
 
     private void playEnemyTurn(){
         Random random = new Random();
         int r = random.nextInt(10);
         int c = random.nextInt(10);
-        if (board.getPlayerBoard()[r][c] == 1){
-            Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
-            ImageView imageView = new ImageView(hitImage);
-            playerGridPane.add(imageView,c,r);
-            board.getPlayerBoard()[r][c] = 2;
-            printPlayerBoard();
-        }
-        playPlayerTurn();
+        colorEffect(mainBackground1ImageView,0.85,-0.27);
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(event -> {
+            if (board.getPlayerBoard()[r][c] == 1) {
+                Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
+                ImageView imageView = new ImageView(hitImage);
+                playerGridPane.add(imageView, c, r);
+                board.getPlayerBoard()[r][c] = 2;
+                printPlayerBoard();
+                playerLives--;
+                playPlayerTurn();
+            } else if (board.getPlayerBoard()[r][c] == 0) {
+                Image isWaterImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/equis.png")));
+                ImageView imageView = new ImageView(isWaterImage);
+                playerGridPane.add(imageView, c, r);
+                board.getPlayerBoard()[r][c] = 4;
+                printPlayerBoard();
+                playPlayerTurn();
+            }
+            else if ((((board.getPlayerBoard()[r][c] != 0)&&(board.getPlayerBoard()[r][c] != 1)))) {
+                playEnemyTurn();
+                System.out.println("cell occupied-- doing the process again");
+            }
+            System.out.println(playerLives);
+            checkWinLoose();
+        });
+        pause.play();
     }
 
     private void playPlayerTurn(){
-        Random random = new Random();
-        int r = random.nextInt(10);
-        int c = random.nextInt(10);
-        if (board.getEnemyBoard()[r][c] == 0) {
-            Image hitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/navalbattlejjc/view/images/bomba.png")));
-            ImageView imageView = new ImageView(hitImage);
-            enemyGridPane.add(imageView, c, r);
-            board.getEnemyBoard()[r][c] = 2;
-            printPlayerBoard();
-        }
-    }
-
-    //getter of the pane in any gridPane
-    private Node getNodeFromGridPane(GridPane gridPane, int row, int column) {
-        for (Node node : gridPane.getChildren()) {
-            Integer nodeRow = GridPane.getRowIndex(node);
-            Integer nodeColumn = GridPane.getColumnIndex(node);
-            if (nodeRow != null && nodeRow == row && nodeColumn != null && nodeColumn == column) {
-                return node;
-            }
-        }
-        return null;
+        colorEffect(mainBackground1ImageView,0,0);
     }
 
     EventHandler<ActionEvent> onHandleButtonPlayGame = new EventHandler<>() {
@@ -505,8 +517,20 @@ public class GameController {
             moveVbox(buttonsHbox, true);
             mainPane.getChildren().add(enemyGridPane);
             mainPane.getChildren().remove(playButton);
+            playEnemyTurn();
         }
     };
+
+    private void checkWinLoose(){
+        if(playerLives==0){
+            colorEffect(playerGridPane,0.85,-0.27);
+            colorEffect(enemyGridPane,0.85,-0.27);
+        }
+        if (enemyLives==0){
+            colorEffect(mainBackground1ImageView,-0.4,1);
+            colorEffect(mainBackground1ImageView,-0.4,1);
+        }
+    }
 
     private void moveGridpane(GridPane gridPane, int toX){
         TranslateTransition gridTranslateTransition = new TranslateTransition(Duration.seconds(1.5), gridPane);
