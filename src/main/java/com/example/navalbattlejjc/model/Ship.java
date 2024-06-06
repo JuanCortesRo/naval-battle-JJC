@@ -1,4 +1,4 @@
-// Developed by por "JJC"
+// Developed by "JJC"
 package com.example.navalbattlejjc.model;
 
 import javafx.scene.layout.GridPane;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ship {
+    public boolean isSunken = false;
     private int length;
-
     private int[][] shipPositions;
 
     public void createAnyShip(GridPane gridPane, int coordX, int coordY, boolean rotation) {
@@ -55,18 +55,10 @@ public class Ship {
     }
 
     private void DrawSubmarine(Pane shipPane ,Pane graficPane, boolean rotation) {
-        double[] exteriorSubmarinePoints = {
-                22, 9, 45, 9, 45, 5, 60, 5, 60, 9, 90, 10, 120, 13, 136, 18, 120, 13, 134, 1, 136, 1, 140, 18, 148, 25, 136, 32, 120, 38, 140, 32, 136, 49, 134, 49, 120, 38, 90, 40, 60, 42, 60, 45, 45, 45, 45, 41, 22, 41,
-        };
-        double[] shadowSubmarinePoints = {
-                20, 9, 25, 8, 48, 8, 48, 5, 63, 5, 63, 6, 93, 8, 123, 12, 139, 20, 123, 15, 137, 2, 140, 2, 139, 4, 143, 20, 149, 27, 140, 34, 123, 40, 142, 34, 139, 49, 139, 49, 123, 40, 93, 43, 63, 45, 63, 46, 48, 46, 48, 45, 30, 44, 10, 38,
-        };
-        double[] interiorSubmarinePointsA = {
-                10, 26, 10, 23, 34, 24, 34, 22, 42, 22, 42, 19, 46, 19, 46, 31, 42, 31, 42, 29, 42, 27, 33, 27, 33, 26,
-        };
-        double[] interiorSubmarinePointsB = {
-                35, 11, 80, 15, 120, 25, 80, 35, 35, 39,
-        };
+        double[] exteriorSubmarinePoints = {22, 9, 45, 9, 45, 5, 60, 5, 60, 9, 90, 10, 120, 13, 136, 18, 120, 13, 134, 1, 136, 1, 140, 18, 148, 25, 136, 32, 120, 38, 140, 32, 136, 49, 134, 49, 120, 38, 90, 40, 60, 42, 60, 45, 45, 45, 45, 41, 22, 41,};
+        double[] shadowSubmarinePoints = {20, 9, 25, 8, 48, 8, 48, 5, 63, 5, 63, 6, 93, 8, 123, 12, 139, 20, 123, 15, 137, 2, 140, 2, 139, 4, 143, 20, 149, 27, 140, 34, 123, 40, 142, 34, 139, 49, 139, 49, 123, 40, 93, 43, 63, 45, 63, 46, 48, 46, 48, 45, 30, 44, 10, 38,};
+        double[] interiorSubmarinePointsA = {10, 26, 10, 23, 34, 24, 34, 22, 42, 22, 42, 19, 46, 19, 46, 31, 42, 31, 42, 29, 42, 27, 33, 27, 33, 26,};
+        double[] interiorSubmarinePointsB = {35, 11, 80, 15, 120, 25, 80, 35, 35, 39,};
 
         // Convert array double to list double calling the method convertArrayToList
         List<Double> exteriorSubmarinePoints2 = convertArrayToList(exteriorSubmarinePoints);
@@ -137,21 +129,11 @@ public class Ship {
     }
 
     private void DrawDestructor(Pane shipPane , Pane graficPane, boolean rotation){
-        double[] exteriorDestructorPoints = {
-                1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 96, 40, 70, 45, 46, 46, 30, 42, 16, 36, 1,25
-        };
-        double[] shadowDestructorPoints = {
-                1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 99, 12, 99, 42, 70, 48, 46, 49, 30, 46, 16, 40, 1,25
-        };
-        double[] interiorDestructorPoints = {
-                8, 25, 16, 20, 30, 12, 46, 8, 70, 9, 97, 14, 97, 36, 70, 41, 46, 42, 30, 38, 16, 30, 8,25
-        };
-        double[] gunDestructorPoints = {
-                20, 24, 45, 23, 45, 20, 55, 18, 70, 20, 70, 28, 55, 30, 45, 28, 45, 25, 20, 26
-        };
-        double[] backDestructorPoints = {
-                70, 11, 97, 16, 97, 34, 70, 39
-        };
+        double[] exteriorDestructorPoints = {1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 96, 40, 70, 45, 46, 46, 30, 42, 16, 36, 1,25};
+        double[] shadowDestructorPoints = {1, 25, 16, 14, 30, 8, 46, 4, 70, 5, 96, 10, 99, 12, 99, 42, 70, 48, 46, 49, 30, 46, 16, 40, 1,25};
+        double[] interiorDestructorPoints = {8, 25, 16, 20, 30, 12, 46, 8, 70, 9, 97, 14, 97, 36, 70, 41, 46, 42, 30, 38, 16, 30, 8,25};
+        double[] gunDestructorPoints = {20, 24, 45, 23, 45, 20, 55, 18, 70, 20, 70, 28, 55, 30, 45, 28, 45, 25, 20, 26};
+        double[] backDestructorPoints = {70, 11, 97, 16, 97, 34, 70, 39};
 
         List<Double> exteriorDestructorPoints2 = convertArrayToList(exteriorDestructorPoints);
         List<Double> interiorDestructorPoints2 = convertArrayToList(interiorDestructorPoints);
@@ -224,21 +206,10 @@ public class Ship {
     }
 
     private void DrawAircraftCarrier(Pane shipPane ,Pane graficPane, boolean rotation) {
-        double[] exteriorAircraftCarrierPoints = {
-                1.8, 12, 145, 1, 150, 16, 195, 20, 195, 38, 110, 45, 8, 45, 1.8, 12,
-        };
-
-        double[] shadowAircraftCarrierPoints = {
-                1.8, 14, 145, 3, 150, 18, 198, 22, 198, 40, 112, 48, 15, 49, 8, 45,
-        };
-
-        double[] landingTrackPoints = {
-                5, 15, 142, 4.8, 147, 21, 9, 32.2,
-        };
-
-        double[] interiorPoints = {
-                15, 40, 15, 48, 112, 48, 110, 35,
-        };
+        double[] exteriorAircraftCarrierPoints = {1.8, 12, 145, 1, 150, 16, 195, 20, 195, 38, 110, 45, 8, 45, 1.8, 12,};
+        double[] shadowAircraftCarrierPoints = {1.8, 14, 145, 3, 150, 18, 198, 22, 198, 40, 112, 48, 15, 49, 8, 45,};
+        double[] landingTrackPoints = {5, 15, 142, 4.8, 147, 21, 9, 32.2,};
+        double[] interiorPoints = {15, 40, 15, 48, 112, 48, 110, 35,};
 
         //Convert array double to list double calling the method convertArrayToList
         List<Double> exteriorAircraftCarrierPoints2 = convertArrayToList(exteriorAircraftCarrierPoints);
@@ -316,18 +287,9 @@ public class Ship {
     }
 
     private void DrawFrigate(Pane shipPane ,Pane graficPane, boolean rotation) {
-        double[] exteriorFrigatePoints = {
-                1, 25, 16, 17, 30, 14, 40, 14, 47, 15, 47, 35, 40, 36, 30, 36, 16, 33, 1,25
-        };
-
-        double[] internFrigatePoints = {
-                5, 25, 16, 20, 30, 17, 40, 17, 47, 17, 47, 33, 40, 33, 30, 33, 16, 30, 5,25
-        };
-
-        double[] shadowFrigatePoints = {
-                1, 26, 16, 18, 30, 15, 40, 15, 48, 15, 49, 18, 49, 38, 40, 39, 30, 39, 16, 36, 1,27, 1,25
-        };
-
+        double[] exteriorFrigatePoints = {1, 25, 16, 17, 30, 14, 40, 14, 47, 15, 47, 35, 40, 36, 30, 36, 16, 33, 1,25};
+        double[] internFrigatePoints = {5, 25, 16, 20, 30, 17, 40, 17, 47, 17, 47, 33, 40, 33, 30, 33, 16, 30, 5,25};
+        double[] shadowFrigatePoints = {1, 26, 16, 18, 30, 15, 40, 15, 48, 15, 49, 18, 49, 38, 40, 39, 30, 39, 16, 36, 1,27, 1,25};
 
         List<Double> exteriorFrigatePoints2 = convertArrayToList(exteriorFrigatePoints);
         List<Double> internFrigatePoints2 = convertArrayToList(internFrigatePoints);

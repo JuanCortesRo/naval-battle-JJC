@@ -1,4 +1,4 @@
-// Developed by por "JJC"
+// Developed by "JJC"
 package com.example.navalbattlejjc;
 
 import com.example.navalbattlejjc.view.GameStage;
